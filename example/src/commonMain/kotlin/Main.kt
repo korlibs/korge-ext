@@ -22,7 +22,7 @@ class MainOldMask : ScaledScene(512, 512) {
         val bitmap2 = bitmap.applyEffect(BitmapEffect(dropShadowColor = Colors.BLUE, dropShadowX = 10, dropShadowY = 0, dropShadowRadius = 6))
         val maskedView = MaskedView()
         addChild(maskedView)
-        maskedView.text("HELLO WORLD!", textSize = 64.0)
+        maskedView.text2("HELLO WORLD!", textSize = 64.0)
         val img = maskedView.image(bitmap2).scale(3, 3)
         val mask = Circle(256.0).centered
         maskedView.mask = mask

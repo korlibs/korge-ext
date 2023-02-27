@@ -1,0 +1,6 @@
+name: "korge-clip"
+plugins:
+  #- serialization
+dependencies:
+  - "maven::common::com.soywiz.korlibs.korge2:korge"
+
