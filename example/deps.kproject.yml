@@ -1,4 +1,5 @@
 #name: deps
 dependencies:
-    - ../korge-mymodule
-
+    - ../korge-masked-view
+    - ../korge-ktree
+    - ../korge-text2
