@@ -1,0 +1,6 @@
+name: "korge-frameblock"
+plugins:
+  #- serialization
+dependencies:
+  - "maven::common::com.soywiz.korlibs.korge2:korge"
+
