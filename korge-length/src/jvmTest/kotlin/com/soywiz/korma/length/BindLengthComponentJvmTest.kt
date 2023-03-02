@@ -7,7 +7,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.color.*
 import kotlin.test.*
 
-class BindLengthComponentTest {
+class BindLengthComponentJvmTest {
     @Test
     fun testPercent() = korgeScreenshotTest(512, 512) {
         val container = fixedSizeContainer(300.0, 500.0)
