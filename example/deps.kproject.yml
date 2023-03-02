@@ -7,3 +7,4 @@ dependencies:
     - ../korge-grid
     - ../korge-qview
     - ../korge-compat-old
+    - ../korge-bus
