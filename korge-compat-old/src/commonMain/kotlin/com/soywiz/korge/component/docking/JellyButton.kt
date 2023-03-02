@@ -1,4 +1,4 @@
-package com.soywiz.korge.component.old
+package com.soywiz.korge.component.docking
 
 import com.soywiz.klock.milliseconds
 import com.soywiz.korge.input.mouse
