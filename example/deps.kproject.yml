@@ -9,3 +9,4 @@ dependencies:
     - ../korge-compat-old
     - ../korge-bus
     - ../korge-frameblock
+    - ../korge-length
