@@ -10,3 +10,4 @@ dependencies:
     - ../korge-bus
     - ../korge-frameblock
     - ../korge-length
+    - ../korge-shape-ext
