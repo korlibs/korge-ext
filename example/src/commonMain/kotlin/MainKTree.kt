@@ -1,3 +1,4 @@
+/*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.view.SContainer
 import com.soywiz.korge.view.ktree.readKTree
@@ -8,3 +9,4 @@ class MainKTree : Scene() {
         addChild(resourcesVfs["scene.ktree"].readKTree(views))
     }
 }
+*/

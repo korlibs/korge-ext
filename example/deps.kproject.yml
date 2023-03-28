@@ -1,13 +1,14 @@
 #name: deps
 dependencies:
-    - ../korge-masked-view
-    - ../korge-ktree
-    - ../korge-text2
-    - ../korge-clip
-    - ../korge-grid
-    - ../korge-qview
-    - ../korge-compat-old
-    - ../korge-bus
-    - ../korge-frameblock
-    - ../korge-length
-    - ../korge-shape-ext
+    #- ../korge-masked-view
+    #- ../korge-ktree
+    #- ../korge-text2
+    #- ../korge-clip
+    #- ../korge-grid
+    #- ../korge-qview
+    #- ../korge-compat-old
+    #- ../korge-bus
+    #- ../korge-frameblock
+    #- ../korge-length
+    #- ../korge-shape-ext
+    - ../korim-charts
