@@ -11,4 +11,5 @@ dependencies:
     #- ../korge-frameblock
     #- ../korge-length
     #- ../korge-shape-ext
-    - ../korim-charts
+    #- ../korim-charts
+    - ../korge-docking
