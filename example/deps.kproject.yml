@@ -7,10 +7,10 @@ dependencies:
   - ../korge-grid
   - ../korge-qview
   - ../korge-compat-old
-  #- ../korge-bus
-  #- ../korge-frameblock
+  - ../korge-bus
+  - ../korge-frameblock
   #- ../korge-length
   #- ../korge-shape-ext
-  #- ../korim-charts
-  #- ../korge-docking
-  #- ../korge-collision
+  - ../korim-charts
+  - ../korge-docking
+  - ../korge-collision

@@ -2,8 +2,7 @@ package korlibs.image.vector.chart
 
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
-import korlibs.image.text.HorizontalAlign
-import korlibs.image.text.VerticalAlign
+import korlibs.image.text.*
 import korlibs.image.vector.Context2d
 import korlibs.math.geom.Point
 import korlibs.math.geom.Rectangle
@@ -39,7 +38,7 @@ open class ChartBars(val list: List<DataPoint>) : Chart() {
         color: RGBA,
         width: Double = 1.2
     ) {
-        lineWidth = width.toDouble()
+        lineWidth = width.toFloat()
         beginPath()
         moveTo(Point(x0, y0))
         lineTo(Point(x1, y1))
@@ -47,14 +46,12 @@ open class ChartBars(val list: List<DataPoint>) : Chart() {
     }
 
     private fun Context2d.renderRefLine(rect: Rectangle, y: Double, value: String, important: Boolean) {
-        val x = rect.left
+        val x: Float = rect.left
         renderLine(x.toDouble(), y, rect.right.toDouble(), y, if (important) Colors.BLACK else Colors.DARKGREY)
         fillText(
             value,
-            x - 2,
-            y,
-            halign = HorizontalAlign.RIGHT,
-            valign = VerticalAlign.BOTTOM,
+            Point(x - 2, y.toFloat()),
+            align = TextAlignment.BOTTOM_RIGHT,
             color = Colors.DARKGREY
         )
     }
@@ -104,10 +101,8 @@ open class ChartBars(val list: List<DataPoint>) : Chart() {
                 //fillText(item.name, rx + barWidth * 0.5, rect.bottom, halign = HorizontalAlign.CENTER, valign = VerticalAlign.TOP)
                 fillText(
                     item.name,
-                    0,
-                    0,
-                    halign = if (fit == Fit.FULL) HorizontalAlign.CENTER else HorizontalAlign.RIGHT,
-                    valign = VerticalAlign.MIDDLE,
+                    Point.ZERO,
+                    align = TextAlignment(if (fit == Fit.FULL) HorizontalAlign.CENTER else HorizontalAlign.RIGHT, VerticalAlign.MIDDLE),
                     color = Colors.DARKSLATEGRAY
                 )
             }
