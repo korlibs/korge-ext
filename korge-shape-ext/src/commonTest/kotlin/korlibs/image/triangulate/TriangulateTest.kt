@@ -1,19 +1,15 @@
 package korlibs.image.triangulate
 
-import korlibs.image.bitmap.NativeImage
-import korlibs.image.bitmap.context2d
-import korlibs.image.color.Colors
-import korlibs.image.format.PNG
-import korlibs.image.format.writeTo
-import com.soywiz.korio.file.std.localCurrentDirVfs
-import korlibs.math.geom.MPoint
-import korlibs.math.geom.Point
+import korlibs.image.bitmap.*
+import korlibs.image.color.*
+import korlibs.image.format.*
+import korlibs.io.file.std.*
+import korlibs.math.geom.*
 import korlibs.math.geom.shape.*
-import korlibs.math.geom.triangle.TriangleList
+import korlibs.math.geom.triangle.*
 import korlibs.math.geom.vector.*
-import korlibs.math.triangle.poly2tri.triangulateSafe
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import korlibs.math.triangle.poly2tri.*
+import kotlin.test.*
 
 class TriangulateTest {
     @Test

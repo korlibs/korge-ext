@@ -1,5 +1,6 @@
 package korlibs.math.geom.shape.ops.internal
 
+import korlibs.datastructure.iterators.*
 import korlibs.math.geom.*
 import korlibs.math.geom.shape.*
 import korlibs.math.geom.vector.*
@@ -37,9 +38,19 @@ fun Paths.toShape2d(): Shape2D {
     }
 }
 
+fun PointArrayList(points: List<MPoint>): PointList = PointArrayList(points.size).also { out ->
+    points.fastForEach { out.add(it.immutable) }
+}
+@Deprecated("")
+fun PointList.toPoints(): List<MPoint> = Array(size) { this[it].mutable }.toList()
+
 fun PointList.toClipperPath() = Path(toPoints())
 fun List<PointList>.toClipperPaths() = Paths(this.map { it.toClipperPath() })
 fun VectorPath.toClipperPaths() = this.toPathPointList().toClipperPaths()
+
+val Shape2D.closed: Boolean get() = this.toVectorPath().isLastCommandClose
+val List<PointList>.totalVertices get() = this.sumOf { it.size }
+val Shape2D.paths: List<PointList> get() = this.toVectorPath().getPoints2List()
 
 fun Shape2D.clipperOp(other: Shape2D, op: Clipper.ClipType): Shape2D {
     val clipper = DefaultClipper()

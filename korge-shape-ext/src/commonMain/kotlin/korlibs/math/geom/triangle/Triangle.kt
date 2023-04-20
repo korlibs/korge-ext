@@ -195,14 +195,14 @@ fun Triangle(p0: MPoint, p1: MPoint, p2: MPoint, fixOrientation: Boolean = false
     @Suppress("NAME_SHADOWING")
     var p2 = p2
     if (fixOrientation) {
-        if (Orientation.orient2d(p0, p1, p2) == Orientation.CLOCK_WISE) {
+        if (Orientation.orient2d(p0.immutable, p1.immutable, p2.immutable) == Orientation.CLOCK_WISE) {
             val pt = p2
             p2 = p1
             p1 = pt
             //println("Fixed orientation");
         }
     }
-    if (checkOrientation && Orientation.orient2d(p2, p1, p0) != Orientation.CLOCK_WISE) throw(Error("Triangle must defined with Orientation.CW"))
+    if (checkOrientation && Orientation.orient2d(p2.immutable, p1.immutable, p0.immutable) != Orientation.CLOCK_WISE) throw(Error("Triangle must defined with Orientation.CW"))
     return Triangle.Base(p0, p1, p2)
 }
 
@@ -250,9 +250,9 @@ class TriangleList(val points: PointArrayList, val indices: ShortArray, val numT
     }
 
     fun getTriangle(index: Int, out: MutableTriangle = MutableTriangle()): MutableTriangle {
-        points.getPoint(indices[index * 3 + 0].toInt() and 0xFFFF, out.p0)
-        points.getPoint(indices[index * 3 + 1].toInt() and 0xFFFF, out.p1)
-        points.getPoint(indices[index * 3 + 2].toInt() and 0xFFFF, out.p2)
+        out.p0.copyFrom(points.get(indices[index * 3 + 0].toInt() and 0xFFFF))
+        out.p1.copyFrom(points.get(indices[index * 3 + 1].toInt() and 0xFFFF))
+        out.p2.copyFrom(points.get(indices[index * 3 + 2].toInt() and 0xFFFF))
         return out
     }
 

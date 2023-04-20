@@ -4,15 +4,15 @@ import korlibs.math.geom.shape.*
 import korlibs.math.geom.shape.ops.internal.*
 import korlibs.math.geom.vector.*
 
-infix fun Shape2d.collidesWith(other: Shape2d): Boolean =
-    this.clipperOp(other, Clipper.ClipType.INTERSECTION) != Shape2d.Empty
+infix fun Shape2D.collidesWith(other: Shape2D): Boolean =
+    this.clipperOp(other, Clipper.ClipType.INTERSECTION) != EmptyShape2d
 
-infix fun Shape2d.intersection(other: Shape2d): Shape2d = this.clipperOp(other, Clipper.ClipType.INTERSECTION)
-infix fun Shape2d.union(other: Shape2d): Shape2d = this.clipperOp(other, Clipper.ClipType.UNION)
-infix fun Shape2d.xor(other: Shape2d): Shape2d = this.clipperOp(other, Clipper.ClipType.XOR)
-infix fun Shape2d.difference(other: Shape2d): Shape2d = this.clipperOp(other, Clipper.ClipType.DIFFERENCE)
+infix fun Shape2D.intersection(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.INTERSECTION)
+infix fun Shape2D.union(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.UNION)
+infix fun Shape2D.xor(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.XOR)
+infix fun Shape2D.difference(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.DIFFERENCE)
 
-fun Shape2d.extend(size: Double, cap: LineCap = LineCap.ROUND): Shape2d {
+fun Shape2D.extend(size: Double, cap: LineCap = LineCap.ROUND): Shape2D {
     val clipper = ClipperOffset()
     val solution = Paths()
     clipper.addPaths(
@@ -23,7 +23,7 @@ fun Shape2d.extend(size: Double, cap: LineCap = LineCap.ROUND): Shape2d {
     return solution.toShape2d()
 }
 
-fun Shape2d.extendLine(size: Double, join: LineJoin = LineJoin.BEVEL, cap: LineCap = LineCap.SQUARE): Shape2d {
+fun Shape2D.extendLine(size: Double, join: LineJoin = LineJoin.BEVEL, cap: LineCap = LineCap.SQUARE): Shape2D {
     val clipper = ClipperOffset()
     val solution = Paths()
     clipper.addPaths(

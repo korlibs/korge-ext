@@ -10,7 +10,7 @@ dependencies:
   - ../korge-bus
   - ../korge-frameblock
   - ../korge-length
-  #- ../korge-shape-ext
+  - ../korge-shape-ext
   - ../korim-charts
   - ../korge-docking
   - ../korge-collision

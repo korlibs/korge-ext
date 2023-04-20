@@ -105,8 +105,8 @@ class SpatialMeshFind(val spatialMesh: SpatialMesh) {
             fun getCommonEdge(t1: Triangle, t2: Triangle): Edge {
                 val commonIndexes = PointArrayList()
                 for (n in 0 until 3) {
-                    val point = t1.point(n)
-                    if (t2.containsPoint(point)) commonIndexes.add(point)
+                    val point: MPoint = t1.point(n)
+                    if (t2.containsPoint(point)) commonIndexes.add(point.immutable)
                 }
                 if (commonIndexes.size != 2) throw Error("Triangles are not contiguous")
                 return Edge(commonIndexes[0], commonIndexes[1])

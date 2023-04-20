@@ -3809,8 +3809,8 @@ class Paths private constructor(private val al: FastArrayList<Path>) : MutableLi
             //	i++
             //}
             //return result
-            val bb = BoundsBuilder()
-            for (path in this) for (p in path) bb.add(p)
+            val bb = MBoundsBuilder()
+            for (path in this) for (p in path) bb.add(p.immutable)
             return bb.getBounds()
         }
 

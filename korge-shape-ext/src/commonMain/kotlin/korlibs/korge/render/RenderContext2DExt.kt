@@ -15,4 +15,3 @@ fun RenderContext2D.path(path: VectorPath, color: RGBA = this.multiplyColor, fil
 fun RenderContext2D.triangles(triangles: TriangleList, color: RGBA = this.multiplyColor, filtering: Boolean = this.filtering) {
     texturedVertexArrayNoTransform(TexturedVertexArray.fromTriangles(triangles, color, matrix = m), filtering)
 }
-

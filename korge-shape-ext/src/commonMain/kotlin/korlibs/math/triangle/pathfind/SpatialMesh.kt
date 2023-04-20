@@ -1,6 +1,6 @@
 package korlibs.math.triangle.pathfind
 
-import com.soywiz.korio.util.niceStr
+import korlibs.io.util.*
 import korlibs.math.geom.*
 import korlibs.math.geom.triangle.Edge
 import korlibs.math.geom.triangle.Triangle
