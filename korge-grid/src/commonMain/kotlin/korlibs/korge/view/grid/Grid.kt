@@ -1,13 +1,10 @@
-package com.soywiz.korge.view.grid
+package korlibs.korge.view.grid
 
-import com.soywiz.kmem.nearestAlignedTo
-import com.soywiz.korge.render.RenderContext
-import com.soywiz.korge.render.useLineBatcher
-import korlibs.image.color.Colors
-import korlibs.math.geom.MMatrix
-import korlibs.math.geom.MPoint
-import korlibs.math.geom.MRectangleInt
-import korlibs.math.geom.vector.rect
+import korlibs.memory.nearestAlignedTo
+import korlibs.korge.render.RenderContext
+import korlibs.korge.render.useLineBatcher
+import korlibs.image.color.*
+import korlibs.math.geom.*
 
 interface Grid {
     fun snap(point: MPoint, out: MPoint = MPoint()): MPoint
@@ -40,7 +37,7 @@ open class OrthographicGrid(
         val matrix = m
         val transform = matrix.toTransform()
         ctx.useLineBatcher { ctxLine ->
-            ctxLine.draw(matrix) {
+            ctxLine.draw(matrix.immutable) {
                 val rect = MRectangleInt(0, 0, width.toInt(), height.toInt())
                 val dx = transform.scaleX * gridWidth
                 val dy = transform.scaleY * gridHeight
@@ -55,7 +52,7 @@ open class OrthographicGrid(
                     }
                 }
                 ctxLine.drawVector(Colors.BLACK) {
-                    rect(rect)
+                    rect(rect.immutable)
                 }
                 ctxLine.drawVector(Colors.WHITE) {
                     rect(rect.left - 1, rect.top - 1, rect.width + 2, rect.height + 2)

@@ -1,4 +1,4 @@
-package com.soywiz.korge.view.clip
+package korlibs.korge.view.clip
 
 import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*

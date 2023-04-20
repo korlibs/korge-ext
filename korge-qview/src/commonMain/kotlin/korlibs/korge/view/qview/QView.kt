@@ -1,17 +1,16 @@
-package com.soywiz.korge.view.qview
+package korlibs.korge.view.qview
 
 import korlibs.datastructure.iterators.fastForEach
-import com.soywiz.klock.*
-import com.soywiz.korge.input.EventsDslMarker
-import com.soywiz.korge.input.MouseEvents
-import com.soywiz.korge.input.onClick
-import com.soywiz.korge.tween.*
+import korlibs.time.*
+import korlibs.korge.input.EventsDslMarker
+import korlibs.korge.input.MouseEvents
+import korlibs.korge.input.onClick
+import korlibs.korge.tween.*
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
-import com.soywiz.korio.async.*
-import korlibs.math.geom.Angle
-import korlibs.math.geom.IPoint
-import korlibs.math.geom.degrees
+import korlibs.io.async.*
+import korlibs.korge.view.*
+import korlibs.math.geom.*
 import korlibs.math.interpolation.*
 import kotlin.reflect.KMutableProperty1
 
@@ -25,7 +24,7 @@ class QView(val views: List<View>) : List<View> by views, BView {
 
     operator fun get(name: String): QView = QView(views.mapNotNull { it.firstDescendantWith { it.name == name } })
 
-    fun position(): IPoint = first.ipos
+    fun position(): Point = first.pos
 
     fun <T> setProperty(prop: KMutableProperty1<View, T>, value: T) {
         views.fastForEach { prop.set(it, value) }
@@ -39,28 +38,28 @@ class QView(val views: List<View>) : List<View> by views, BView {
         get() = firstOrNull?.visible ?: false
         set(value) = fastForEach { it.visible = value }
 
-    var alpha: Double
-        get() = firstOrNull?.alpha ?: 1.0
+    var alpha: Float
+        get() = firstOrNull?.alpha ?: 1f
         set(value) = fastForEach { it.alpha = value }
 
-    var scale: Double
-        get() = firstOrNull?.scale ?: 1.0
-        set(value) = fastForEach { it.scale = value }
+    var scaleAvg: Float
+        get() = firstOrNull?.scaleAvg ?: 1f
+        set(value) = fastForEach { it.scaleAvg = value }
 
-    var scaleX: Double
-        get() = firstOrNull?.scaleX ?: 1.0
+    var scaleX: Float
+        get() = firstOrNull?.scaleX ?: 1f
         set(value) = fastForEach { it.scaleX = value }
 
-    var scaleY: Double
-        get() = firstOrNull?.scaleY ?: 1.0
+    var scaleY: Float
+        get() = firstOrNull?.scaleY ?: 1f
         set(value) = fastForEach { it.scaleY = value }
 
-    var x: Double
-        get() = firstOrNull?.x ?: 0.0
+    var x: Float
+        get() = firstOrNull?.x ?: 0f
         set(value) = fastForEach { it.x = value }
 
-    var y: Double
-        get() = firstOrNull?.y ?: 0.0
+    var y: Float
+        get() = firstOrNull?.y ?: 0f
         set(value) = fastForEach { it.y = value }
 
     var rotation: Angle
@@ -81,19 +80,25 @@ class QView(val views: List<View>) : List<View> by views, BView {
 }
 
 fun QView.visible(value: Boolean) { visible = value }
-fun QView.alpha(value: Double) { alpha = value }
+fun QView.alpha(value: Float) { alpha = value }
 fun QView.onClick(handler: @EventsDslMarker suspend (MouseEvents) -> Unit) = fastForEach { it.onClick(handler) }
 inline fun <reified T : View> QView.castTo(): T? = firstOrNull as? T?
 
 /** Indexer that allows to get a descendant marked with the name [name]. */
 operator fun View?.get(name: String): QView = QView(this)[name]
 
+@PublishedApi
+internal val DEFAULT_EASING = Easing.EASE_IN_OUT_QUAD
+
+@PublishedApi
+internal val DEFAULT_TIME = 1.seconds
+
 suspend fun QView.tween(
     vararg vs: V2<*>,
     time: TimeSpan = DEFAULT_TIME,
     easing: Easing = DEFAULT_EASING,
     waitTime: TimeSpan = TimeSpan.NIL,
-    callback: (Double) -> Unit = { }
+    callback: (Float) -> Unit = { }
 ) {
     if (isEmpty()) {
         // @TODO: Do this?
