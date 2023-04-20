@@ -9,7 +9,7 @@ dependencies:
   - ../korge-compat-old
   - ../korge-bus
   - ../korge-frameblock
-  #- ../korge-length
+  - ../korge-length
   #- ../korge-shape-ext
   - ../korim-charts
   - ../korge-docking

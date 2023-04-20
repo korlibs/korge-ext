@@ -1,18 +1,17 @@
 package korlibs.korge.component.length
 
 import korlibs.datastructure.*
-import korlibs.klock.*
-import korlibs.kmem.*
-import korlibs.korge.annotations.*
-import korlibs.korge.component.*
-import korlibs.korge.view.*
 import korlibs.io.lang.*
+import korlibs.korge.annotations.*
+import korlibs.korge.view.*
 import korlibs.math.geom.*
 import korlibs.math.length.*
+import korlibs.memory.*
 import korlibs.time.*
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
+import kotlin.jvm.*
 import kotlin.native.concurrent.*
 import kotlin.reflect.*
 
@@ -30,10 +29,17 @@ import kotlin.reflect.*
 fun View.bindLength(prop: KMutableProperty1<View, Double>, horizontal: Boolean = prop.isHorizontal, value: LengthExtensions.() -> Length): Cancellable {
     return bindLength(prop.name, { prop.set(this, it) }, horizontal, value)
 }
+@KorgeExperimental
+@JvmName("bindLengthFloat")
+fun View.bindLength(prop: KMutableProperty1<View, Float>, horizontal: Boolean = prop.isHorizontal, value: LengthExtensions.() -> Length): Cancellable {
+    return bindLength(prop.name, { prop.set(this, it.toFloat()) }, horizontal, value)
+}
+
+private var View.bindLengthComponent: BindLengthComponent by Extra.PropertyThis { BindLengthComponent(this) }
 
 @KorgeExperimental
 fun View.bindLength(name: String, setProp: (Double) -> Unit, horizontal: Boolean, value: LengthExtensions.() -> Length): Cancellable {
-    val component = getOrCreateComponentUpdateWithViews { BindLengthComponent(it) }
+    val component = bindLengthComponent
     component.setBind(horizontal, name, setProp, value(LengthExtensions))
     return Cancellable {
         component.removeBind(horizontal, name)
@@ -69,17 +75,16 @@ var ViewWithLength.width: Length? by ViewWithLengthProp(View::scaledWidth)
 var ViewWithLength.height: Length? by ViewWithLengthProp(View::scaledHeight)
 var ViewWithLength.x: Length? by ViewWithLengthProp(View::x)
 var ViewWithLength.y: Length? by ViewWithLengthProp(View::y)
-var ViewWithLength.scale: Length? by ViewWithLengthProp(View::scale)
+var ViewWithLength.scaleAvg: Length? by ViewWithLengthProp(View::scaleAvg)
 var ViewWithLength.scaleX: Length? by ViewWithLengthProp(View::scaleX)
 var ViewWithLength.scaleY: Length? by ViewWithLengthProp(View::scaleY)
 
-fun ViewWithLengthProp(prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null) = LengthDelegatedProperty<ViewWithLength>(prop, horizontal) { it.view }
-fun LengthDelegatedProperty(prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null) = LengthDelegatedProperty<View>(prop, horizontal) { it }
+fun ViewWithLengthProp(prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null) = LengthDelegatedProperty<ViewWithLength>(prop, horizontal) { it.view }
+fun LengthDelegatedProperty(prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null) = LengthDelegatedProperty<View>(prop, horizontal) { it }
 
-class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null, val getView: (T) -> View) {
+class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null, val getView: (T) -> View) {
     val horizontal = horizontal ?: prop.isHorizontal
-    private fun getBind(view: View): BindLengthComponent =
-        view.getOrCreateComponentUpdateWithViews { BindLengthComponent(it) }
+    private fun getBind(view: View): BindLengthComponent = view.bindLengthComponent
 
     operator fun getValue(viewHolder: T, property: KProperty<*>): Length? {
         return getBind(getView(viewHolder)).getLength(prop.name, horizontal)
@@ -90,7 +95,7 @@ class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Double>, hori
         if (length == null) {
             bind.removeBind(horizontal, prop.name)
         } else {
-            bind.setBind(horizontal, prop.name, { prop.set(view, it) }, length)
+            bind.setBind(horizontal, prop.name, { prop.set(view, it.toFloat()) }, length)
         }
     }
 }
@@ -100,9 +105,21 @@ internal val KCallable<*>.isHorizontal get() = when (name) {
     else -> name.contains("x") || name.contains("X") || name.contains("width") || name.contains("Width")
 }
 
-internal class BindLengthComponent(override val view: BaseView) : UpdateComponentWithViews {
+internal class BindLengthComponent(val view: View) {
     private val binds = Array(2) { LinkedHashMap<String, Pair<(Double) -> Unit, Length>>() }
     private lateinit var views: Views
+
+    var updater: Closeable? = null
+
+    private fun ensureUpdater() {
+        if (updater != null) return
+        updater = view.addUpdaterWithViews { views, dt -> this@BindLengthComponent.update(views, dt) }
+    }
+
+    private fun removeUpdater() {
+        updater?.close()
+        updater = null
+    }
 
     fun getLength(key: String, horizontal: Boolean): Length? {
         return binds[horizontal.toInt()][key]?.second
@@ -116,21 +133,22 @@ internal class BindLengthComponent(override val view: BaseView) : UpdateComponen
 
     fun setBind(x: Boolean, name: String, prop: (Double) -> Unit, value: Length) {
         binds[x.toInt()][name] = prop to value
+        ensureUpdater()
     }
 
     fun removeBind(x: Boolean, name: String) {
         binds[x.toInt()].remove(name)
         if (binds[0].isEmpty() && binds[1].isEmpty()) {
-            removeFromView()
+            removeUpdater()
         }
     }
 
     private val tempTransform = MMatrix.Transform()
-    override fun update(views: Views, dt: TimeSpan) {
+    private fun update(views: Views, dt: TimeSpan) {
         this.views = views
         val container = (view as? View?)?.parent ?: views.stage
-        tempTransform.setMatrixNoReturn(container.globalMatrix)
-        val scaleAvgInv = 1.0 / tempTransform.scaleAvg
+
+        val scaleAvgInv = 1.0 / MatrixTransform.fromMatrix(container.globalMatrix).scaleAvg
 
         context.fontSize = 16.0 // @TODO: Can we store something in the views?
         context.viewportWidth = if (views.clipBorders || views.scaleAnchor != Anchor.TOP_LEFT) views.virtualWidthDouble else views.actualVirtualWidth.toDouble()
