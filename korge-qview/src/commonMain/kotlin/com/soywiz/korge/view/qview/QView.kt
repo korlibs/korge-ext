@@ -1,18 +1,18 @@
 package com.soywiz.korge.view.qview
 
-import com.soywiz.kds.iterators.fastForEach
+import korlibs.datastructure.iterators.fastForEach
 import com.soywiz.klock.*
 import com.soywiz.korge.input.EventsDslMarker
 import com.soywiz.korge.input.MouseEvents
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.tween.*
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
 import com.soywiz.korio.async.*
-import com.soywiz.korma.geom.Angle
-import com.soywiz.korma.geom.IPoint
-import com.soywiz.korma.geom.degrees
-import com.soywiz.korma.interpolation.*
+import korlibs.math.geom.Angle
+import korlibs.math.geom.IPoint
+import korlibs.math.geom.degrees
+import korlibs.math.interpolation.*
 import kotlin.reflect.KMutableProperty1
 
 class QView(val views: List<View>) : List<View> by views, BView {

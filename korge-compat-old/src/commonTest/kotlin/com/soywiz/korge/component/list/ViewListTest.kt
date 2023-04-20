@@ -3,8 +3,8 @@ package com.soywiz.korge.component.list
 import com.soywiz.korge.tests.ViewsForTesting
 import com.soywiz.korge.view.SolidRect
 import com.soywiz.korge.view.xy
-import com.soywiz.korim.color.Colors
-import com.soywiz.korma.geom.MRectangle
+import korlibs.image.color.Colors
+import korlibs.math.geom.MRectangle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

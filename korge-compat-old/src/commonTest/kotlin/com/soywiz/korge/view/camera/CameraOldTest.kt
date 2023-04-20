@@ -8,8 +8,8 @@ import com.soywiz.korge.time.*
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tween.*
 import com.soywiz.korgw.*
-import com.soywiz.korim.color.*
-import com.soywiz.korma.geom.*
+import korlibs.image.color.*
+import korlibs.math.geom.*
 import kotlinx.coroutines.*
 import kotlin.math.*
 

@@ -3,9 +3,10 @@ package com.soywiz.korge.view
 import com.soywiz.korge.render.VertexInfo
 import com.soywiz.korge.render.testRenderContext
 import com.soywiz.korge.scene.debugBmpFontSync
-import com.soywiz.korma.geom.MPoint
-import com.soywiz.korma.geom.MRectangle
-import com.soywiz.korma.geom.MSize
+import korlibs.math.geom.MPoint
+import korlibs.math.geom.MRectangle
+import korlibs.math.geom.MSize
+import korlibs.korge.view.TextOld
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

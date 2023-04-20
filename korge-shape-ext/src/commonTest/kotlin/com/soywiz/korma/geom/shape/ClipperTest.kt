@@ -1,10 +1,10 @@
-package com.soywiz.korma.geom.shape
+package korlibs.math.geom.shape
 
-import com.soywiz.korma.geom.MPoint
-import com.soywiz.korma.geom.shape.ops.internal.Clipper
-import com.soywiz.korma.geom.shape.ops.internal.DefaultClipper
-import com.soywiz.korma.geom.shape.ops.internal.Path
-import com.soywiz.korma.geom.shape.ops.internal.Paths
+import korlibs.math.geom.MPoint
+import korlibs.math.geom.shape.ops.internal.Clipper
+import korlibs.math.geom.shape.ops.internal.DefaultClipper
+import korlibs.math.geom.shape.ops.internal.Path
+import korlibs.math.geom.shape.ops.internal.Paths
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

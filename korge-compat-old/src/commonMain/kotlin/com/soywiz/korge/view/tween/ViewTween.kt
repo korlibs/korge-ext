@@ -1,10 +1,17 @@
 package com.soywiz.korge.view.tween
 
-import com.soywiz.klock.*
-import com.soywiz.korge.tween.*
-import com.soywiz.korge.view.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.interpolation.*
+import korlibs.klock.*
+import korlibs.korge.tween.*
+import korlibs.korge.view.*
+import korlibs.math.geom.*
+import korlibs.math.interpolation.*
+import korlibs.time.*
+
+@PublishedApi
+internal val DEFAULT_EASING = Easing.EASE_IN_OUT_QUAD
+
+@PublishedApi
+internal val DEFAULT_TIME = 1.seconds
 
 @Deprecated("Use animator instead")
 suspend fun View.show(time: TimeSpan = DEFAULT_TIME, easing: Easing = DEFAULT_EASING) =

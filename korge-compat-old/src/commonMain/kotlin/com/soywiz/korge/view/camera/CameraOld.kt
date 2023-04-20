@@ -1,13 +1,13 @@
 package com.soywiz.korge.view.camera
 
-import com.soywiz.kds.*
+import korlibs.datastructure.*
 import com.soywiz.klock.*
 import com.soywiz.korge.annotations.*
 import com.soywiz.korge.tween.*
 import com.soywiz.korge.view.*
 import com.soywiz.korio.lang.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.interpolation.*
+import korlibs.math.geom.*
+import korlibs.math.interpolation.*
 import kotlin.math.*
 
 @KorgeExperimental

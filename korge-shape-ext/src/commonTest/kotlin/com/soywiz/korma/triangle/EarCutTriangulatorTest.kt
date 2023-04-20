@@ -1,7 +1,7 @@
-package com.soywiz.korma.triangle
+package korlibs.math.triangle
 
-import com.soywiz.korma.geom.shape.*
-import com.soywiz.korma.geom.vector.*
+import korlibs.math.geom.shape.*
+import korlibs.math.geom.vector.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

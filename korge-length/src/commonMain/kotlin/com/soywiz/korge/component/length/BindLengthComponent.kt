@@ -1,6 +1,6 @@
 package com.soywiz.korge.component.length
 
-import com.soywiz.kds.*
+import korlibs.datastructure.*
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korge.annotations.*
@@ -8,8 +8,8 @@ import com.soywiz.korge.baseview.*
 import com.soywiz.korge.component.*
 import com.soywiz.korge.view.*
 import com.soywiz.korio.lang.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.length.*
+import korlibs.math.geom.*
+import korlibs.math.length.*
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set

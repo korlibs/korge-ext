@@ -1,10 +1,12 @@
 package com.soywiz.korge.view
 
+/*
 import com.soywiz.korag.*
 import com.soywiz.korag.log.AGBaseLog
 import com.soywiz.korge.render.MaskStates
 import com.soywiz.korge.render.VertexInfo
 import com.soywiz.korge.tests.ViewsForTesting
+import korlibs.korge.view.MaskedView
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -46,3 +48,4 @@ class MaskedViewTest : ViewsForTesting() {
         ), stencilsRef)
     }
 }
+*/

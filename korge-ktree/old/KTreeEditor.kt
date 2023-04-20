@@ -1,7 +1,7 @@
 package com.soywiz.korge.editor
 
 /*
-import com.soywiz.kds.*
+import korlibs.datastructure.*
 import com.soywiz.klock.*
 import com.soywiz.kmem.*
 import com.soywiz.korev.*
@@ -14,7 +14,7 @@ import com.soywiz.korgw.*
 import com.soywiz.korio.async.*
 import com.soywiz.korio.file.*
 import com.soywiz.korio.serialization.xml.*
-import com.soywiz.korma.geom.*
+import korlibs.math.geom.*
 import kotlin.math.*
 import com.soywiz.korge.debug.*
 import com.soywiz.korge.tween.*

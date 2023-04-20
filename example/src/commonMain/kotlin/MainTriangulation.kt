@@ -1,10 +1,11 @@
+/*
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.*
 import com.soywiz.korge.view.*
-import com.soywiz.korim.color.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.triangle.triangulate.*
+import korlibs.image.color.*
+import korlibs.math.geom.*
+import korlibs.math.geom.vector.*
+import korlibs.math.triangle.triangulate.*
 
 class MainTriangulation : Scene() {
     override suspend fun SContainer.sceneMain() {
@@ -102,3 +103,4 @@ class MainTriangulation : Scene() {
 
     }
 }
+*/

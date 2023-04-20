@@ -1,4 +1,4 @@
-package com.soywiz.korma.geom.triangle
+package korlibs.math.geom.triangle
 
 import kotlin.math.abs
 import kotlin.test.assertTrue

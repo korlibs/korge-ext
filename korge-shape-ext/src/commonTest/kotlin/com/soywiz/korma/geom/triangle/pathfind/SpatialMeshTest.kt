@@ -1,11 +1,11 @@
-package com.soywiz.korma.geom.triangle.pathfind
+package korlibs.math.geom.triangle.pathfind
 
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.geom.shape.*
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.triangle.pathfind.finder
-import com.soywiz.korma.triangle.pathfind.spatialMesh
-import com.soywiz.korma.triangle.poly2tri.triangulateSafe
+import korlibs.math.geom.*
+import korlibs.math.geom.shape.*
+import korlibs.math.geom.vector.*
+import korlibs.math.triangle.pathfind.finder
+import korlibs.math.triangle.pathfind.spatialMesh
+import korlibs.math.triangle.poly2tri.triangulateSafe
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

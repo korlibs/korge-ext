@@ -12,7 +12,7 @@ import com.soywiz.korge.view.View
 import com.soywiz.korge.view.get
 import com.soywiz.korio.async.addSuspend
 import com.soywiz.korio.async.launchImmediately
-import com.soywiz.korma.interpolation.Easing
+import korlibs.math.interpolation.Easing
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext

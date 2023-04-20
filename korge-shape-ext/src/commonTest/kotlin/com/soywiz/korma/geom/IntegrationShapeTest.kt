@@ -1,11 +1,11 @@
-package com.soywiz.korma.geom
+package korlibs.math.geom
 
-import com.soywiz.korma.geom.shape.*
-import com.soywiz.korma.geom.shape.ops.*
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.triangle.*
-import com.soywiz.korma.triangle.pathfind.*
-import com.soywiz.korma.triangle.triangulate.*
+import korlibs.math.geom.shape.*
+import korlibs.math.geom.shape.ops.*
+import korlibs.math.geom.vector.*
+import korlibs.math.triangle.*
+import korlibs.math.triangle.pathfind.*
+import korlibs.math.triangle.triangulate.*
 import kotlin.math.*
 import kotlin.test.*
 

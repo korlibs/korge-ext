@@ -1,9 +1,11 @@
 package com.soywiz.korge.view.ktree
 
-import com.soywiz.korge.tests.*
-import com.soywiz.korge.view.*
-import com.soywiz.korio.file.std.*
-import com.soywiz.korma.geom.*
+import korlibs.korge.tests.*
+import korlibs.korge.view.*
+import korlibs.io.file.std.*
+import korlibs.korge.view.Ellipse
+import korlibs.korge.view.ktree.*
+import korlibs.math.geom.*
 import kotlin.test.*
 
 class KTreeTest : ViewsForTesting() {
@@ -13,6 +15,6 @@ class KTreeTest : ViewsForTesting() {
         assertIs<Container>(ktree)
         val child = ktree.children[1]
         assertIs<Ellipse>(child)
-        assertEquals(Anchor.CENTER, Anchor(child.anchorX, child.anchorY))
+        assertEquals(Anchor.CENTER, child.anchor)
     }
 }

@@ -2,8 +2,8 @@ package com.soywiz.korge.component.docking
 
 import com.soywiz.korge.component.*
 import com.soywiz.korge.view.*
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.interpolation.*
+import korlibs.math.geom.*
+import korlibs.math.interpolation.*
 
 fun <T : View> T.dockedTo(anchor: Anchor, scaleMode: ScaleMode = ScaleMode.NO_SCALE, offset: MPoint = MPoint(), hook: (View) -> Unit = {}): T {
     DockingComponent(this, anchor, scaleMode, MPoint().copyFrom(offset), hook).attach()

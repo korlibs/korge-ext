@@ -3,11 +3,11 @@ package com.soywiz.korge.view.grid
 import com.soywiz.kmem.nearestAlignedTo
 import com.soywiz.korge.render.RenderContext
 import com.soywiz.korge.render.useLineBatcher
-import com.soywiz.korim.color.Colors
-import com.soywiz.korma.geom.MMatrix
-import com.soywiz.korma.geom.MPoint
-import com.soywiz.korma.geom.MRectangleInt
-import com.soywiz.korma.geom.vector.rect
+import korlibs.image.color.Colors
+import korlibs.math.geom.MMatrix
+import korlibs.math.geom.MPoint
+import korlibs.math.geom.MRectangleInt
+import korlibs.math.geom.vector.rect
 
 interface Grid {
     fun snap(point: MPoint, out: MPoint = MPoint()): MPoint

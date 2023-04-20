@@ -1,26 +1,16 @@
 package com.soywiz.korge.view.clip
 
-import com.soywiz.kds.FastArrayList
-import com.soywiz.kds.SortedMap
-import com.soywiz.kds.fastArrayListOf
-import com.soywiz.kds.iterators.fastForEach
-import com.soywiz.kds.toFastList
-import com.soywiz.klock.TimeSpan
-import com.soywiz.klock.milliseconds
-import com.soywiz.klock.seconds
-import com.soywiz.korge.annotations.KorgeExperimental
-import com.soywiz.korge.tween.V2
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.addUpdater
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.List
+import korlibs.datastructure.*
+import korlibs.datastructure.iterators.*
+import korlibs.korge.annotations.*
+import korlibs.korge.tween.*
+import korlibs.korge.view.*
+import korlibs.math.interpolation.*
+import korlibs.time.*
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.getOrPut
-import kotlin.collections.iterator
-import kotlin.collections.mapNotNull
 import kotlin.collections.set
-import kotlin.reflect.KMutableProperty0
+import kotlin.reflect.*
 
 @KorgeExperimental
 interface MovieClipTimeline {
@@ -96,16 +86,16 @@ open class MovieClipState(val def: MovieClip, val name: String?) : MovieClipTime
             val v1 = k1?.let { timeline[k1] } as? V2<Any>?
             when {
                 v0 == null -> {
-                    v1!!.set(1.0)
+                    v1!!.set(Ratio.ONE)
                 }
                 v1 == null -> {
-                    v0!!.set(1.0)
+                    v0!!.set(Ratio.ONE)
                 }
                 else -> {
                     val total = (k1!! - k0!!)
                     val elapsed = (time - k0)
                     val ratio = elapsed / total
-                    key.set(v0.interpolator(ratio, v0.end, v1.end))
+                    key.set(v0.interpolator(ratio.toRatio(), v0.end, v1.end))
                 }
             }
             //key.set(v0!!.interpolator())

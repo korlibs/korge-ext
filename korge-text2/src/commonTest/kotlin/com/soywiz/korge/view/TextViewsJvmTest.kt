@@ -1,7 +1,8 @@
 package com.soywiz.korge.view
 
 import com.soywiz.korge.tests.*
-import com.soywiz.korma.geom.*
+import korlibs.math.geom.*
+import korlibs.korge.view.TextOld
 import kotlin.test.*
 
 class TextViewsJvmTest : ViewsForTesting(log = true) {

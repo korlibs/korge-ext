@@ -1,10 +1,10 @@
-package com.soywiz.korma.length
+package korlibs.math.length
 
 import com.soywiz.korge.component.length.*
 import com.soywiz.korge.testing.*
 import com.soywiz.korge.time.*
 import com.soywiz.korge.view.*
-import com.soywiz.korim.color.*
+import korlibs.image.color.*
 import kotlin.test.*
 
 class BindLengthComponentJvmTest {

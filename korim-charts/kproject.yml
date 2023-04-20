@@ -1,4 +1,4 @@
-name: "korim-chart"
+name: "korim-charts"
 plugins:
   #- serialization
 dependencies:

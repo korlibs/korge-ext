@@ -1,4 +1,4 @@
-package com.soywiz.korma.length
+package korlibs.math.length
 
 import com.soywiz.korge.annotations.*
 import com.soywiz.korge.component.length.*

@@ -1,13 +1,13 @@
 package korlibs.image.vector.chart
 
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.text.HorizontalAlign
-import com.soywiz.korim.text.VerticalAlign
-import com.soywiz.korim.vector.Context2d
-import com.soywiz.korma.geom.Point
-import com.soywiz.korma.geom.Rectangle
-import com.soywiz.korma.geom.degrees
+import korlibs.image.color.Colors
+import korlibs.image.color.RGBA
+import korlibs.image.text.HorizontalAlign
+import korlibs.image.text.VerticalAlign
+import korlibs.image.vector.Context2d
+import korlibs.math.geom.Point
+import korlibs.math.geom.Rectangle
+import korlibs.math.geom.degrees
 import kotlin.math.*
 
 open class ChartBars(val list: List<DataPoint>) : Chart() {

@@ -1,7 +1,7 @@
-package com.soywiz.korim.bitmap
+package korlibs.image.bitmap
 
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.geom.slice.*
+import korlibs.math.geom.*
+import korlibs.math.geom.slice.*
 
 val RectSlice<out Bitmap>.bmpWidth: Int get() = this.baseWidth
 val RectSlice<out Bitmap>.bmpHeight: Int get() = this.baseHeight

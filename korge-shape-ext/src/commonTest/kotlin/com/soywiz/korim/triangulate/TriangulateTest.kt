@@ -1,17 +1,17 @@
-package com.soywiz.korim.triangulate
+package korlibs.image.triangulate
 
-import com.soywiz.korim.bitmap.NativeImage
-import com.soywiz.korim.bitmap.context2d
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.PNG
-import com.soywiz.korim.format.writeTo
+import korlibs.image.bitmap.NativeImage
+import korlibs.image.bitmap.context2d
+import korlibs.image.color.Colors
+import korlibs.image.format.PNG
+import korlibs.image.format.writeTo
 import com.soywiz.korio.file.std.localCurrentDirVfs
-import com.soywiz.korma.geom.MPoint
-import com.soywiz.korma.geom.Point
-import com.soywiz.korma.geom.shape.*
-import com.soywiz.korma.geom.triangle.TriangleList
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.triangle.poly2tri.triangulateSafe
+import korlibs.math.geom.MPoint
+import korlibs.math.geom.Point
+import korlibs.math.geom.shape.*
+import korlibs.math.geom.triangle.TriangleList
+import korlibs.math.geom.vector.*
+import korlibs.math.triangle.poly2tri.triangulateSafe
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

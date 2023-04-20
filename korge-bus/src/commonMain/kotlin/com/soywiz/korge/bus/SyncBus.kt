@@ -1,6 +1,6 @@
 package com.soywiz.korge.bus
 
-import com.soywiz.kds.iterators.fastForEach
+import korlibs.datastructure.iterators.fastForEach
 import com.soywiz.korinject.AsyncDestructor
 import com.soywiz.korinject.AsyncInjector
 import com.soywiz.korio.lang.Closeable

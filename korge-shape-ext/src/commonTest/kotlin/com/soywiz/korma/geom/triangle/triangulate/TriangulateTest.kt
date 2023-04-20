@@ -1,7 +1,7 @@
-package com.soywiz.korma.geom.triangle.triangulate
+package korlibs.math.geom.triangle.triangulate
 
-import com.soywiz.korma.geom.MPoint
-import com.soywiz.korma.triangle.triangulate.triangulate
+import korlibs.math.geom.MPoint
+import korlibs.math.triangle.triangulate.triangulate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

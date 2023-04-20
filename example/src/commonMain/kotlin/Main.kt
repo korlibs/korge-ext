@@ -1,9 +1,9 @@
-import com.soywiz.korge.Korge
-import com.soywiz.korge.scene.sceneContainer
-import com.soywiz.korim.color.Colors
+import korlibs.korge.Korge
+import korlibs.korge.scene.sceneContainer
+import korlibs.image.color.Colors
 
-suspend fun main() = Korge(bgcolor = Colors.DARKGREY) {
+suspend fun main() = Korge(backgroundColor = Colors.DARKGREY).start {
     //sceneContainer().changeTo({ MainOldMask() })
-    //sceneContainer().changeTo({ MainKTree() })
-    sceneContainer().changeTo({ MainCharts() })
+    sceneContainer().changeTo({ MainKTree() })
+    //sceneContainer().changeTo({ MainCharts() })
 }

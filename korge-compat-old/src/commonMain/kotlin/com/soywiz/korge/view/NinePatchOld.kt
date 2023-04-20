@@ -1,8 +1,8 @@
 package com.soywiz.korge.view
 
 import com.soywiz.korge.render.*
-import com.soywiz.korim.bitmap.*
-import com.soywiz.korma.geom.*
+import korlibs.image.bitmap.*
+import korlibs.math.geom.*
 import kotlin.math.*
 
 inline fun Container.ninePatchOld(

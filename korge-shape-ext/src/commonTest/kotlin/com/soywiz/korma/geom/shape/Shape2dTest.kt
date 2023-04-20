@@ -1,9 +1,9 @@
-package com.soywiz.korma.geom.shape
+package korlibs.math.geom.shape
 
-import com.soywiz.korma.geom.*
-import com.soywiz.korma.geom.shape.ops.*
-import com.soywiz.korma.geom.vector.*
-import com.soywiz.korma.internal.*
+import korlibs.math.geom.*
+import korlibs.math.geom.shape.ops.*
+import korlibs.math.geom.vector.*
+import korlibs.math.internal.*
 import kotlin.test.*
 
 class Shape2dTest {
