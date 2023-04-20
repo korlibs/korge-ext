@@ -1,4 +1,4 @@
-package com.soywiz.korge.component.list
+package korlibs.korge.component.list
 
 /*
 Deprecated("")

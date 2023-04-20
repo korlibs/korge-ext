@@ -6,7 +6,7 @@ dependencies:
   - ../korge-clip
   - ../korge-grid
   - ../korge-qview
-  #- ../korge-compat-old
+  - ../korge-compat-old
   #- ../korge-bus
   #- ../korge-frameblock
   #- ../korge-length

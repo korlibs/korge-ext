@@ -1,8 +1,8 @@
-package com.soywiz.korge.component.list
+package korlibs.korge.component.list
 
 /*
-import com.soywiz.korge.tests.*
-import com.soywiz.korge.view.*
+import korlibs.korge.tests.*
+import korlibs.korge.view.*
 import korlibs.image.color.*
 import korlibs.math.geom.*
 import kotlin.test.*

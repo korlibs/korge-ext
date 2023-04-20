@@ -1,8 +1,7 @@
-package com.soywiz.korge.component.list
+package korlibs.korge.component.list
 
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.View
-import com.soywiz.korio.async.Signal
+import korlibs.io.async.*
+import korlibs.korge.view.*
 
 class ViewList(
 	val view0: View,

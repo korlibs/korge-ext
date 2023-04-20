@@ -14,4 +14,4 @@ fun BitmapSliceCompat(
     trim: MRectangle,
     rotated: Boolean,
     name: String = "unknown"
-) = bmp.slice(frame.toInt(), name, if (rotated) ImageOrientation.ROTATE_90 else ImageOrientation.ROTATE_0)
+) = bmp.slice(frame.immutable.toInt(), name, if (rotated) ImageOrientation.ROTATE_90 else ImageOrientation.ROTATE_0)

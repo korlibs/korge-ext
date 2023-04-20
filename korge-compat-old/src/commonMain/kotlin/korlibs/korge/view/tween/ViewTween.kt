@@ -1,6 +1,5 @@
-package com.soywiz.korge.view.tween
+package korlibs.korge.view.tween
 
-import korlibs.klock.*
 import korlibs.korge.tween.*
 import korlibs.korge.view.*
 import korlibs.math.geom.*

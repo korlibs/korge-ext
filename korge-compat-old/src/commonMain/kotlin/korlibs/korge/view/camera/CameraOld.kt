@@ -1,13 +1,13 @@
-package com.soywiz.korge.view.camera
+package korlibs.korge.view.camera
 
 import korlibs.datastructure.*
-import com.soywiz.klock.*
-import com.soywiz.korge.annotations.*
-import com.soywiz.korge.tween.*
-import com.soywiz.korge.view.*
-import com.soywiz.korio.lang.*
+import korlibs.io.lang.*
+import korlibs.korge.annotations.*
+import korlibs.korge.tween.*
+import korlibs.korge.view.*
 import korlibs.math.geom.*
 import korlibs.math.interpolation.*
+import korlibs.time.*
 import kotlin.math.*
 
 @KorgeExperimental
@@ -21,17 +21,17 @@ inline fun Container.cameraContainerOld(
 
 @KorgeExperimental
 class CameraContainerOld(
-    override var width: Double = 100.0,
-    override var height: Double = 100.0,
+    width: Double = 100.0,
+    height: Double = 100.0,
     camera: CameraOld = CameraOld(0.0, 0.0, width, height),
     decoration: @ViewDslMarker CameraContainerOld.() -> Unit = {}
-) : FixedSizeContainer(width, height, true), View.Reference {
+) : FixedSizeContainer(Size(width, height), true), View.Reference {
 
     private val contentContainer = Container()
 
     val content: Container = object : Container(), Reference {
-        override fun getLocalBoundsInternal(out: MRectangle) {
-            out.setTo(0.0, 0.0, this@CameraContainerOld.width, this@CameraContainerOld.height)
+        override fun getLocalBoundsInternal(): Rectangle {
+            return Rectangle(Point.ZERO, this@CameraContainerOld.size)
         }
     }
 
@@ -70,13 +70,13 @@ class CameraContainerOld(
         val contentContainerX = width * anchorX
         val contentContainerY = height * anchorY
 
-        content.x = -x
-        content.y = -y
-        contentContainer.x = contentContainerX
-        contentContainer.y = contentContainerY
+        content.x = -x.toFloat()
+        content.y = -y.toFloat()
+        contentContainer.x = contentContainerX.toFloat()
+        contentContainer.y = contentContainerY.toFloat()
         contentContainer.rotation = angle
-        contentContainer.scaleX = realScaleX
-        contentContainer.scaleY = realScaleY
+        contentContainer.scaleX = realScaleX.toFloat()
+        contentContainer.scaleY = realScaleY.toFloat()
     }
 
     internal fun setTo(camera: CameraOld) = setTo(
@@ -86,8 +86,8 @@ class CameraContainerOld(
         camera.height,
         camera.zoom,
         camera.angle,
-        camera.anchorX,
-        camera.anchorY
+        camera.anchor.doubleX,
+        camera.anchor.doubleY
     )
 }
 
@@ -99,9 +99,18 @@ class CameraOld(
     height: Double = 100.0,
     zoom: Double = 1.0,
     angle: Angle = 0.degrees,
-    override var anchorX: Double = 0.0,
-    override var anchorY: Double = 0.0
+    anchorX: Double = 0.0,
+    anchorY: Double = 0.0
 ) : MutableInterpolable<CameraOld>, Interpolable<CameraOld>, Anchorable {
+    override var anchor: Anchor = Anchor(anchorX, anchorY)
+
+    var anchorX: Double
+        get() = anchor.doubleX
+        set(value) { anchor = anchor}
+
+    init {
+        this.anchor = Anchor(anchorX, anchorY)
+    }
 
     var x: Double by Observable(x, before = { if (withUpdate) setTo(x = it) })
     var y: Double by Observable(y, before = { if (withUpdate) setTo(y = it) })
@@ -137,8 +146,8 @@ class CameraOld(
         other.height,
         other.zoom,
         other.angle,
-        other.anchorX,
-        other.anchorY
+        other.anchor.sx.toDouble(),
+        other.anchor.sy.toDouble()
     )
 
     fun setTo(
@@ -148,8 +157,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchorX,
-        anchorY: Double = this.anchorY
+        anchorX: Double = this.anchor.doubleX,
+        anchorY: Double = this.anchor.doubleY
     ): CameraOld {
         if (withUpdate) {
             container?.setTo(x, y, width, height, zoom, angle, anchorX, anchorY)
@@ -161,8 +170,7 @@ class CameraOld(
             this.height = height
             this.zoom = zoom
             this.angle = angle
-            this.anchorX = anchorX
-            this.anchorY = anchorY
+            this.anchor = Anchor(anchorX, anchorY)
         }
         return this
     }
@@ -174,8 +182,8 @@ class CameraOld(
         height = other.height,
         zoom = other.zoom,
         angle = other.angle,
-        anchorX = other.anchorX,
-        anchorY = other.anchorY,
+        anchorX = other.anchor.doubleX,
+        anchorY = other.anchor.doubleY,
         time = time,
         easing = easing
     )
@@ -187,8 +195,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchorX,
-        anchorY: Double = this.anchorY,
+        anchorX: Double = this.anchor.doubleX,
+        anchorY: Double = this.anchor.doubleY,
         time: TimeSpan,
         easing: Easing = Easing.LINEAR
     ) {
@@ -198,18 +206,18 @@ class CameraOld(
         val initialHeight = this.height
         val initialZoom = this.zoom
         val initialAngle = this.angle
-        val initialAnchorX = this.anchorX
-        val initialAnchorY = this.anchorY
+        val initialAnchorX = this.anchor.doubleX
+        val initialAnchorY = this.anchor.doubleY
         container?.tween(time = time, easing = easing) { ratio ->
             setTo(
-                ratio.interpolate(initialX, x),
-                ratio.interpolate(initialY, y),
-                ratio.interpolate(initialWidth, width),
-                ratio.interpolate(initialHeight, height),
-                ratio.interpolate(initialZoom, zoom),
-                ratio.interpolateAngleDenormalized(initialAngle, angle),
-                ratio.interpolate(initialAnchorX, anchorX),
-                ratio.interpolate(initialAnchorY, anchorY)
+                ratio.toRatio().interpolate(initialX, x),
+                ratio.toRatio().interpolate(initialY, y),
+                ratio.toRatio().interpolate(initialWidth, width),
+                ratio.toRatio().interpolate(initialHeight, height),
+                ratio.toRatio().interpolate(initialZoom, zoom),
+                ratio.toRatio().interpolateAngleDenormalized(initialAngle, angle),
+                ratio.toRatio().interpolate(initialAnchorX, anchorX),
+                ratio.toRatio().interpolate(initialAnchorY, anchorY)
             )
         }
     }
@@ -241,8 +249,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchorX,
-        anchorY: Double = this.anchorY
+        anchorX: Double = this.anchor.doubleX,
+        anchorY: Double = this.anchor.doubleY
     ) = CameraOld(
         x = x,
         y = y,
@@ -254,22 +262,21 @@ class CameraOld(
         anchorY = anchorY
     )
 
-    override fun setToInterpolated(ratio: Double, l: CameraOld, r: CameraOld) = setTo(
+    override fun setToInterpolated(ratio: Ratio, l: CameraOld, r: CameraOld): CameraOld = setTo(
         x = ratio.interpolate(l.x, r.x),
         y = ratio.interpolate(l.y, r.y),
         width = ratio.interpolate(l.width, r.width),
         height = ratio.interpolate(l.height, r.height),
         zoom = ratio.interpolate(l.zoom, r.zoom),
         angle = ratio.interpolateAngleDenormalized(l.angle, r.angle),
-        anchorX = ratio.interpolate(l.anchorX, r.anchorX),
-        anchorY = ratio.interpolate(l.anchorY, r.anchorY)
+        anchorX = ratio.interpolate(l.anchor.doubleX, r.anchor.doubleX),
+        anchorY = ratio.interpolate(l.anchor.doubleY, r.anchor.doubleY)
     )
 
-    override fun interpolateWith(ratio: Double, other: CameraOld) = CameraOld().setToInterpolated(ratio, this, other)
+    override fun interpolateWith(ratio: Ratio, other: CameraOld) = CameraOld().setToInterpolated(ratio, this, other)
 
-    override fun toString() = "Camera(" +
-        "x=$x, y=$y, width=$width, height=$height, " +
-        "zoom=$zoom, angle=$angle, anchorX=$anchorX, anchorY=$anchorY)"
+    override fun toString() =
+        "Camera(x=$x, y=$y, width=$width, height=$height, zoom=$zoom, angle=$angle, anchor=${anchor})"
 }
 
 fun CameraOld.xy(x: Double, y: Double): CameraOld {

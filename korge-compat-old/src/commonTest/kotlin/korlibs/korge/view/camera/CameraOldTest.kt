@@ -1,13 +1,13 @@
-package com.soywiz.korge.view.camera
+package korlibs.korge.view.camera
 
 /*
-import com.soywiz.klock.*
-import com.soywiz.korge.*
-import com.soywiz.korge.input.*
-import com.soywiz.korge.time.*
-import com.soywiz.korge.view.*
-import com.soywiz.korge.view.tween.*
-import com.soywiz.korgw.*
+import korlibs.klock.*
+import korlibs.korge.*
+import korlibs.korge.input.*
+import korlibs.korge.time.*
+import korlibs.korge.view.*
+import korlibs.korge.view.tween.*
+import korlibs.korgw.*
 import korlibs.image.color.*
 import korlibs.math.geom.*
 import kotlinx.coroutines.*
