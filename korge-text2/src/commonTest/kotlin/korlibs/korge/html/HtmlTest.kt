@@ -1,10 +1,9 @@
-package com.soywiz.korge.html
+package korlibs.korge.html
 
 import korlibs.image.color.Colors
 import korlibs.image.font.SystemFont
 import korlibs.image.text.TextAlignment
 import korlibs.math.geom.MRectangle
-import korlibs.korge.html.Html
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.Test
 import kotlin.test.assertEquals

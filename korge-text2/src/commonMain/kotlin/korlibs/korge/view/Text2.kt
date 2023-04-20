@@ -1,18 +1,18 @@
 package korlibs.korge.view
 
-import com.soywiz.korag.shader.*
-import com.soywiz.korge.render.*
-import com.soywiz.korge.text.*
-import com.soywiz.korge.view.filter.*
-import com.soywiz.korge.view.property.*
+import korlibs.graphics.shader.*
+import korlibs.korge.render.*
+import korlibs.korge.text.*
+import korlibs.korge.view.filter.*
+import korlibs.korge.view.property.*
 import korlibs.image.bitmap.*
 import korlibs.image.color.*
 import korlibs.image.font.*
 import korlibs.image.paint.*
 import korlibs.image.text.*
-import com.soywiz.korio.async.*
-import com.soywiz.korio.file.*
-import com.soywiz.korio.resources.*
+import korlibs.io.async.*
+import korlibs.io.file.*
+import korlibs.io.resources.*
 import korlibs.math.geom.*
 import korlibs.math.geom.vector.*
 
@@ -175,12 +175,12 @@ open class Text2(
         }
     }
 
-    private val _textBounds = MRectangle(0, 0, 2048, 2048)
+    private var _textBounds = Rectangle(0, 0, 2048, 2048)
     var autoSize = true
     private var boundsVersion = -1
-    val textBounds: MRectangle
+    val textBounds: Rectangle
         get() {
-            getLocalBounds(_textBounds)
+            _textBounds = getLocalBounds()
             return _textBounds
         }
 
@@ -191,9 +191,9 @@ open class Text2(
         this.alignment = align
     }
 
-    fun setTextBounds(rect: IRectangle) {
+    fun setTextBounds(rect: Rectangle) {
         if (this._textBounds == rect && !autoSize) return
-        this._textBounds.copyFrom(rect)
+        this._textBounds = rect
         autoSize = false
         boundsVersion++
         version++
@@ -208,24 +208,21 @@ open class Text2(
         invalidate()
     }
 
-    override fun getLocalBoundsInternal(out: MRectangle) {
+    override fun getLocalBoundsInternal(): Rectangle {
         _renderInternal(null)
         if (filter != null || backdropFilter != null) {
-            super.getLocalBoundsInternal(out) // This is required for getting proper bounds when glyphs are transformed
+            return super.getLocalBoundsInternal() // This is required for getting proper bounds when glyphs are transformed
         } else {
-            out.copyFrom(_textBounds)
+            return _textBounds
         }
     }
-
-    private val tempMatrix = MMatrix()
 
     override fun renderInternal(ctx: RenderContext) {
         _renderInternal(ctx)
         //val tva: TexturedVertexArray? = null
         val tva = tva
         if (tva != null) {
-            tempMatrix.copyFrom(globalMatrix)
-            tempMatrix.pretranslate(container.x, container.y)
+            val tempMatrix = globalMatrix.pretranslated(container.x, container.y)
             ctx.useBatcher { batch ->
                 val bmpfont = font as BitmapFont
                 val tex = bmpfont.baseBmp
@@ -244,7 +241,7 @@ open class Text2(
         _renderInternal(null)
         if (cachedVersionGlyphMetrics != version) {
             cachedVersionGlyphMetrics = version
-            _textMetricsResult = font.getOrNull()?.getTextBoundsWithGlyphs(fontSize, text, renderer, alignment)
+            _textMetricsResult = font.getOrNull()?.getTextBoundsWithGlyphs(fontSize.toFloat(), text, renderer, alignment)
         }
         return _textMetricsResult ?: error("Must ensure font is resolved before calling getGlyphMetrics")
     }
@@ -281,12 +278,12 @@ open class Text2(
 
         if (autoSize && font is Font && boundsVersion != version) {
             boundsVersion = version
-            val metrics = font.getTextBounds(textSize, text, out = textMetrics, renderer = renderer, align = alignment)
-            _textBounds.setTo(
+            val metrics = font.getTextBounds(textSize.toFloat(), text, out = textMetrics, renderer = renderer, align = alignment)
+            _textBounds = Rectangle(
                 metrics.left,
                 alignment.vertical.getOffsetY(metrics.height, -metrics.ascent),
                 metrics.width,
-                font.getFontMetrics(textSize, metrics = fontMetrics).lineHeight * lineCount
+                font.getFontMetrics(textSize.toFloat(), metrics = fontMetrics).lineHeight * lineCount
             )
             //println("autoSize: _textBounds=$_textBounds, ${alignment.horizontal}, ${alignment.horizontal.getOffsetX(metrics.width)} + ${metrics.left}")
         }
@@ -306,7 +303,7 @@ open class Text2(
                     }
                     bitmapFontActions.mreset()
                     bitmapFontActions.align = TextAlignment.BASELINE_LEFT
-                    renderer.invoke(bitmapFontActions, text, textSize, font)
+                    renderer.invoke(bitmapFontActions, text, textSize.toFloat(), font)
                     while (container.numChildren < bitmapFontActions.size) {
                         container.image(Bitmaps.transparent)
                     }
@@ -321,7 +318,7 @@ open class Text2(
                     val firstBounds = bitmapFontActions.getGlyphBounds(0)
                     val lineInfos = bitmapFontActions.getLineInfos()
                     val firstLineInfos = lineInfos.firstOrNull() ?: Text2TextRendererActions.LineInfo()
-                    val totalHeight = lineInfos.sumOf { it.maxLineHeight }
+                    val totalHeight = lineInfos.sumOf { it.maxLineHeight.toDouble() }.toFloat()
                     val textWidth = bounds.width
                     val textHeight = bounds.height
 
@@ -330,8 +327,8 @@ open class Text2(
 
                     //val dx = (-_textBounds.width - textWidth) * horizontalAlign.ratio
                     val dx = _textBounds.x
-                    val dy = when (verticalAlign) {
-                        VerticalAlign.BASELINE -> 0.0
+                    val dy: Float = when (verticalAlign) {
+                        VerticalAlign.BASELINE -> 0f
                         VerticalAlign.TOP -> firstLineInfos.maxTop
                         else -> firstLineInfos.maxTop - (totalHeight) * verticalAlign.ratioFake
                     }
@@ -393,8 +390,8 @@ open class Text2(
                         //}
                         drawText(
                             text = this@Text2.text,
-                            x = 0.0, y = 0.0,
-                            size = realTextSize,
+                            pos = Point.ZERO,
+                            size = realTextSize.toFloat(),
                             font = font,
                             paint = this@Text2.color,
                             renderer = this@Text2.renderer,
@@ -416,7 +413,7 @@ open class Text2(
                     //setContainerPosition(x * 1.0, y * 1.0, font.getFontMetrics(fontSize, fontMetrics).baseline)
                     //println("alignment=$alignment, horizontalAlign=$horizontalAlign, verticalAlign=$verticalAlign")
                     //setContainerPosition(x, y, font.getFontMetrics(fontSize, fontMetrics).baseline)
-                    setContainerPosition(0.0, 0.0, font.getFontMetrics(fontSize, fontMetrics).baseline)
+                    setContainerPosition(0.0, 0.0, font.getFontMetrics(fontSize.toFloat(), fontMetrics).baseline.toDouble())
 
                 }
                 //_staticImage?.smoothing = smoothing
@@ -434,7 +431,7 @@ open class Text2(
             //staticImage?.position(x + alignment.horizontal.getOffsetX(textBounds.width), y + alignment.vertical.getOffsetY(textBounds.height, font.getFontMetrics(fontSize).baseline))
 
             // @TODO: Fix this!
-            setRealContainerPosition(x + alignment.horizontal.getOffsetX(_textBounds.width), y - alignment.vertical.getOffsetY(_textBounds.height, baseline))
+            setRealContainerPosition(x + alignment.horizontal.getOffsetX(_textBounds.width.toFloat()), y - alignment.vertical.getOffsetY(_textBounds.height.toFloat(), baseline.toFloat()))
         }
     }
 
@@ -456,7 +453,7 @@ fun <T : Text2> T.autoSize(value: Boolean): T {
 }
 
 fun <T : Text2> T.textSpacing(spacing: Double): T {
-    renderer = renderer.withSpacing(spacing)
+    renderer = renderer.withSpacing(spacing.toFloat())
     return this
 }
 

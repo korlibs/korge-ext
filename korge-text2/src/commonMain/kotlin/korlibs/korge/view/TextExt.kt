@@ -1,7 +1,6 @@
 package korlibs.korge.view
 
-import com.soywiz.korge.html.*
-import korlibs.korge.html.Html
+import korlibs.korge.html.*
 
 interface IText {
     var text: String

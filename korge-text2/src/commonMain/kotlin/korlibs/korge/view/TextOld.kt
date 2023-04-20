@@ -1,17 +1,17 @@
 package korlibs.korge.view
 
 import korlibs.datastructure.iterators.fastForEach
-import com.soywiz.korge.bitmapfont.drawText
-import korlibs.korge.html.Html
-import com.soywiz.korge.internal.KorgeDeprecated
-import com.soywiz.korge.render.RenderContext
-import com.soywiz.korge.scene.debugBmpFontSync
+import korlibs.korge.bitmapfont.drawText
+import korlibs.korge.render.RenderContext
 import korlibs.image.bitmap.Bitmaps
 import korlibs.image.color.Colors
 import korlibs.image.color.RGBA
 import korlibs.image.font.BitmapFont
 import korlibs.image.font.Font
-import korlibs.math.geom.MRectangle
+import korlibs.korge.html.*
+import korlibs.math.geom.*
+
+annotation class KorgeDeprecated
 
 @KorgeDeprecated
 inline fun Container.textOld(
@@ -209,7 +209,8 @@ class TextOld : View(), IText, IHtml {
         if (autoSize) recalculateBounds()
     }
 
-    override fun getLocalBoundsInternal(out: MRectangle) {
+    override fun getLocalBoundsInternal(): Rectangle {
+        val out = MRectangle()
         if (document != null) {
             out.copyFrom(document!!.bounds)
         } else {
@@ -220,7 +221,7 @@ class TextOld : View(), IText, IHtml {
                 out.copyFrom(textBounds)
             }
         }
-        //println("getLocalBoundsInternal=$out")
+        return out.immutable
     }
 
     override fun createInstance(): View = TextOld()

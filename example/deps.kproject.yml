@@ -2,7 +2,7 @@
 dependencies:
   - ../korge-masked-view
   - ../korge-ktree
-  #- ../korge-text2
+  - ../korge-text2
   #- ../korge-clip
   #- ../korge-grid
   #- ../korge-qview

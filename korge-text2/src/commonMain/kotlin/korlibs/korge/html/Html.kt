@@ -49,9 +49,7 @@ private fun debugBmpFont(tex: BmpSlice): BitmapFont {
 
 val debugBmpFontSync: BitmapFont get() {
     if (debugBmpFontOrNull == null) {
-        runBlockingNoSuspensions {
-            debugBmpFontOrNull = debugBmpFont(DEBUG_FONT_BYTES.openAsync().readBitmap(ImageDecodingProps(preferKotlinDecoder = true)).slice())
-        }
+        debugBmpFontOrNull = debugBmpFont(PNG.decode(DEBUG_FONT_BYTES).slice())
     }
     return debugBmpFontOrNull!!
 }
