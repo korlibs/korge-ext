@@ -32,9 +32,9 @@ fun Path.toShape2d(): Shape2D {
 
 fun Paths.toShape2d(): Shape2D {
     return when (size) {
-        0 -> EmptyShape2d
+        0 -> EmptyShape2D
         1 -> first().toShape2d()
-        else -> CompoundShape2d(this.map(Path::toShape2d))
+        else -> CompoundShape2D(this.map(Path::toShape2d))
     }
 }
 

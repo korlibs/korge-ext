@@ -5,7 +5,7 @@ import korlibs.math.geom.shape.ops.internal.*
 import korlibs.math.geom.vector.*
 
 infix fun Shape2D.collidesWith(other: Shape2D): Boolean =
-    this.clipperOp(other, Clipper.ClipType.INTERSECTION) != EmptyShape2d
+    this.clipperOp(other, Clipper.ClipType.INTERSECTION) != EmptyShape2D
 
 infix fun Shape2D.intersection(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.INTERSECTION)
 infix fun Shape2D.union(other: Shape2D): Shape2D = this.clipperOp(other, Clipper.ClipType.UNION)
