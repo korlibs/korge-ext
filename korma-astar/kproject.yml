@@ -1,0 +1,7 @@
+name: "korma-astar"
+plugins:
+  #- serialization
+dependencies:
+  #- "maven::common::com.soywiz.korlibs.korma:korma"
+  - "maven::common::com.soywiz.korlibs.korge2:korge"
+
