@@ -10,6 +10,7 @@ import korlibs.korge.view.*
 import korlibs.korge.view.tiles.*
 import korlibs.math.geom.*
 import korlibs.math.geom.Circle
+import korlibs.math.geom.vector.*
 import korlibs.math.raycasting.*
 
 suspend fun main() = Korge {
@@ -28,6 +29,9 @@ class RaycastingExampleScene : Scene() {
         for (n in 0 until 10) {
             it[10 + n, 10] = 1
             it[10, 10 + n] = 1
+
+            it[25, 5 + (n * 1.5).toInt()] = 1
+            it[28, 5 + n * 3] = 1
         }
     }
 
@@ -49,7 +53,7 @@ class RaycastingExampleScene : Scene() {
         fun updateOverlay(
             startPoint: Point,
             endPoint: Point,
-            result: Point?
+            result: RayResult?
         ) {
             overlay.updateShape {
                 clear()
@@ -59,7 +63,13 @@ class RaycastingExampleScene : Scene() {
 
                 if (result != null) {
                     stroke(Colors.RED) {
-                        circle(Circle(result, 3f))
+                        circle(Circle(result.point, 3f))
+                    }
+                    stroke(Colors.RED) {
+                        arrow(result.point, result.point + result.normal * 30f)
+                    }
+                    stroke(Colors.YELLOW) {
+                        arrow(result.point, result.point + result.reflected * 30f)
                     }
                 }
             }
@@ -77,7 +87,7 @@ class RaycastingExampleScene : Scene() {
             }
         }
         fun checkTileMap(mousePos: Point) {
-            val result = tileMap.stackedIntMap.raycast(RayFromTwoPoints(startPoint, mousePos), cellSize) {
+            val result = tileMap.stackedIntMap.raycast(Ray.fromTwoPoints(startPoint, mousePos), cellSize) {
                 //println("this.getLast(it.x, it.y): $it")
                 if (!this.inside(it.x, it.y)) return@raycast false
                 this.getLast(it.x, it.y) != 0
