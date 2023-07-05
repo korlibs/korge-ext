@@ -18,7 +18,7 @@ class RaycastExtTest {
             .......
         """.trimIndent()))
 
-        val result = fullMap.raycast(RayFromTwoPoints(Point(12, 12), Point(120, 80)), Size(8, 8)) { this.getLast(it.x, it.y) != 0 }
-        assertEquals(PointInt(18, 16), result?.toInt())
+        val result = fullMap.raycast(Ray.fromTwoPoints(Point(12, 12), Point(120, 80)), Size(8, 8)) { this.getLast(it.x, it.y) != 0 }
+        assertEquals(PointInt(18, 16), result?.point?.toInt())
     }
 }
