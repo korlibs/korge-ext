@@ -132,14 +132,15 @@ open class Text2(
             version++
             invalidate()
         }
+
     @ViewProperty
-    @ViewPropertyProvider(provider = HorizontalAlign.Provider::class)
+    @ViewPropertyProvider(provider = HorizontalAlignProvider::class)
     var horizontalAlign: HorizontalAlign
         get() = alignment.horizontal
         set(value) { alignment = alignment.withHorizontal(value) }
 
     @ViewProperty
-    @ViewPropertyProvider(provider = VerticalAlign.Provider::class)
+    @ViewPropertyProvider(provider = VerticalAlignProvider::class)
     var verticalAlign: VerticalAlign
         get() = alignment.vertical
         set(value) { alignment = alignment.withVertical(value) }
