@@ -1550,7 +1550,7 @@ object Poly2Tri {
         var right = false
     }
 
-    open class SweepContextExt() : SweepContext() {
+    open class SweepContextExt(points: List<List<MPoint>> = emptyList()) : SweepContext(points) {
         val pointsToIndex = linkedHashMapOf<Point, Int>()
 
         fun addPointToListAndGetIndex(p: Point): Int {
@@ -1607,6 +1607,10 @@ object Poly2Tri {
      * @param {SweepContextOptions=} options - constructor options
      */
     open class SweepContext() {
+        constructor(points: List<List<MPoint>>) : this() {
+            addHoles(points)
+        }
+
         /**
          * Initial triangle factor, seed triangle will extend 30% of
          * PointSet width to both left and right.
@@ -1795,8 +1799,9 @@ object Poly2Tri {
          */
 // Shortcut method for sweep.triangulate(SweepContext).
 // Method added in the JavaScript version (was not present in the c++ version)
-        fun triangulate() {
+        fun triangulate(): SweepContext {
             Poly2Tri.triangulate(this)
+            return this
         }
 
 
