@@ -21,7 +21,7 @@ class TriangulationTestBedTest(val name: String, val file: VfsFile) {
         val sweep = Poly2TriNew.Sweep()
         val sweepContext = Poly2TriNew.SweepContext()
         for (points in pointsList) {
-            sweepContext.addHole(points.map { Poly2TriNew.Point(it.x, it.y) })
+            sweepContext.addHole(points.points.map { Poly2TriNew.Point(it.x, it.y) })
         }
         sweep.triangulate(sweepContext)
         val tris = sweepContext.getTriangles()
@@ -44,33 +44,5 @@ class TriangulationTestBedTest(val name: String, val file: VfsFile) {
                     }
             }
         }
-
-
-        fun listPointListFromString(string: String): List<List<MPoint>> {
-            val holes = arrayListOf<List<MPoint>>()
-            var currentPoints = arrayListOf<MPoint>()
-
-            fun split() {
-                if (currentPoints.isNotEmpty()) {
-                    holes += currentPoints
-                    currentPoints = arrayListOf()
-                }
-            }
-
-            for (str in string.split("\n").map { it.trim() }) {
-                if (str.isEmpty()) continue
-
-                if (str == "HOLE") {
-                    split()
-                } else {
-                    val (p1, p2) = str.trim().split(Regex("\\s+"))
-                    currentPoints.add(MPoint(p1.toDouble(), p2.toDouble()))
-                }
-            }
-            split()
-
-            return holes
-        }
     }
-
 }

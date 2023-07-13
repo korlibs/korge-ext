@@ -1,5 +1,11 @@
 package korlibs.math.triangle.poly2tri
 
+import korlibs.datastructure.*
+import korlibs.io.util.*
+import korlibs.math.geom.*
+import kotlin.contracts.*
+import kotlin.math.*
+
 /*
  * Poly2Tri Copyright (c) 2009-2018, Poly2Tri Contributors
  * https://github.com/jhasse/poly2tri
@@ -39,6 +45,13 @@ object Poly2TriNew {
 
     enum class Orientation { CW, CCW, COLLINEAR }
 
+    val DEBUG = false
+
+    @OptIn(ExperimentalContracts::class)
+    inline fun debug(crossinline block: () -> String) {
+        contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+        if (DEBUG) println(block())
+    }
 
     /**
      * Formula to calculate signed area
@@ -56,7 +69,8 @@ object Poly2TriNew {
         val `val` = detleft - detright
 
         return when {
-            kotlin.math.abs(`val`) < EPSILON -> Orientation.COLLINEAR
+            //kotlin.math.abs(`val`) < EPSILON -> Orientation.COLLINEAR
+            `val` == 0.0 -> Orientation.COLLINEAR
             `val` > 0 -> Orientation.CCW
             else -> Orientation.CW
         }
@@ -80,6 +94,8 @@ object Poly2TriNew {
         var p: Point
         var q: Point
 
+        override fun toString(): String = "($p, $q)"
+
         init {
             when {
                 p1.y > p2.y -> {
@@ -92,7 +108,7 @@ object Poly2TriNew {
                         p = p2
                     } else if (p1.x == p2.x) {
                         // Repeat points
-                        throw IllegalArgumentException("Edge::Edge: p1 == p2")
+                        throw IllegalArgumentException("Edge::Edge: p1 == p2 : $p1 == $p2")
                     } else {
                         q = p2
                         p = p1
@@ -109,7 +125,8 @@ object Poly2TriNew {
     }
 
     data class Point(var x: Double = 0.0, var y: Double = 0.0) {
-
+        //override fun toString(): String = "(${x.niceStr(4)}, ${y.niceStr(4)})"
+        override fun toString(): String = "($x, $y)"
         // Assuming Edge is a class defined elsewhere
         val edgeList = mutableListOf<Edge>()
 
@@ -150,8 +167,13 @@ object Poly2TriNew {
         }
     }
 
-    class Triangle(var a: Point, var b: Point, var c: Point) {
+    class Triangle(a: Point, b: Point, c: Point) {
+        override fun toString(): String = "[$a, $b, $c]"
+
         val points = arrayOf(a, b, c)
+        val a get() = points[0]
+        val b get() = points[1]
+        val c get() = points[2]
         val neighbors = arrayOfNulls<Triangle?>(3)
         val constrainedEdge = BooleanArray(3) { false }
         val delaunayEdge = BooleanArray(3) { false }
@@ -185,6 +207,8 @@ object Poly2TriNew {
         }
 
         fun markNeighbor(p1: Point, p2: Point, t: Triangle) {
+            debug { "MarkNeighbor.p2.t: $p1, $p2, $t" }
+
             when {
                 (p1 == points[2] && p2 == points[1]) || (p1 == points[1] && p2 == points[2]) -> neighbors[0] = t
                 (p1 == points[0] && p2 == points[2]) || (p1 == points[2] && p2 == points[0]) -> neighbors[1] = t
@@ -194,6 +218,8 @@ object Poly2TriNew {
         }
 
         fun markNeighbor(t: Triangle) {
+            debug { "MarkNeighbor.t: $t" }
+
             when {
                 t.contains(points[1], points[2]) -> {
                     neighbors[0] = t
@@ -366,18 +392,18 @@ object Poly2TriNew {
         }
 
         fun legalize(oPoint: Point, nPoint: Point) {
-            when (oPoint) {
-                points[0] -> {
+            when {
+                oPoint === points[0] -> {
                     points[1] = points[0]
                     points[0] = points[2]
                     points[2] = nPoint
                 }
-                points[1] -> {
+                oPoint === points[1] -> {
                     points[2] = points[1]
                     points[1] = points[0]
                     points[0] = nPoint
                 }
-                points[2] -> {
+                oPoint === points[2] -> {
                     points[0] = points[2]
                     points[2] = points[1]
                     points[1] = nPoint
@@ -421,7 +447,7 @@ object Poly2TriNew {
         }
 
         fun debugPrint() {
-            println("${points[0]} ${points[1]} ${points[2]}")
+            debug { "${points[0]} ${points[1]} ${points[2]}" }
         }
 
         fun circumcicleContains(point: Point): Boolean {
@@ -461,6 +487,15 @@ object Poly2TriNew {
                 return true
             }
         }
+    }
+
+    fun icmp(a: Point, b: Point): Int {
+        val isZero = a.y.absoluteValue == 0.0 && b.y.absoluteValue == 0.0
+        if (!isZero) {
+            val res = a.y.compareTo(b.y)
+            if (res != 0) return res
+        }
+        return a.x.compareTo(b.x)
     }
 
     fun cmp(a: Point, b: Point): Boolean = when {
@@ -559,13 +594,13 @@ object Poly2TriNew {
         }
     }
 
-    class CDT(private var polyline: ArrayList<Point>) {
+    class CDT(private var polylines: List<List<Point>>) {
 
         private var sweepContext: SweepContext? = null
         private var sweep: Sweep? = null
 
         init {
-            sweepContext = SweepContext(polyline)
+            sweepContext = SweepContext(polylines)
             sweep = Sweep()
         }
 
@@ -590,7 +625,31 @@ object Poly2TriNew {
         }
     }
 
-    class SweepContext(polyline: ArrayList<Point> = arrayListOf()) {
+    open class SweepContextExt(polylines: List<List<Point>> = emptyList()) : SweepContext(polylines) {
+        val pointsToIndex = linkedHashMapOf<Vector2, Int>()
+
+        fun addPointToListAndGetIndex(p: Vector2): Int {
+            return pointsToIndex.getOrPut(p) {
+                points.add(Point(p.xD, p.yD))
+                points.size - 1
+            }
+        }
+
+        fun addEdge(a: Vector2, b: Vector2) {
+            if (a == b) return
+            val i1 = addPointToListAndGetIndex(a)
+            val i2 = addPointToListAndGetIndex(b)
+            val p1 = points[i1]
+            val p2 = points[i2]
+            val edge = Edge(p1, p2)
+            this.edgeList.add(edge)
+            val index = if (edge.q === p1) i1 else i2
+            edgeList.add(edge)
+            //println("EDGE[$index]: $p1, $p2  :  $i1, $i2  :  $points_")
+        }
+    }
+
+    open class SweepContext(polylines: List<List<Point>> = emptyList()) {
         companion object {
             const val K_ALPHA = 0.3
         }
@@ -601,7 +660,7 @@ object Poly2TriNew {
 
         private var triangles = ArrayList<Triangle>()
         private var map = LinkedList<Triangle>()
-        private var points = ArrayList<Point>()
+        protected var points = ArrayList<Point>()
 
         private var front: AdvancingFront? = null
         private var head: Point? = null
@@ -612,9 +671,14 @@ object Poly2TriNew {
         private var afTail: Node? = null
 
         init {
-            if (polyline.isNotEmpty()) {
-                points.addAll(polyline)
-                initEdges(points, closed = true)
+            if (polylines.isNotEmpty()) {
+                addHoles(polylines)
+            }
+        }
+
+        fun addHoles(polylines: List<List<Point>>, closed: Boolean = true) {
+            for (polyline in polylines) {
+                addHole(polyline, closed)
             }
         }
 
@@ -660,12 +724,16 @@ object Poly2TriNew {
             tail = Point(xmax + dx, ymin - dy)
 
             // Sort points along y-axis
-            points.sortWith(compareBy { it.y })
+            points.sortWith { a, b -> icmp(a, b) }
+
+            for (n in 0 until points.size) {
+                debug { "SORTED POINT[$n]: ${points[n]}" }
+            }
         }
 
         private fun initEdges(polyline: List<Point>, closed: Boolean) {
             val numPoints = polyline.size
-            for (i in 0 until if (closed) numPoints else numPoints - 1) {
+            for (i in 0 until (if (closed) numPoints else (numPoints - 1))) {
                 val j = if (i < numPoints - 1) i + 1 else 0
                 edgeList.add(Edge(polyline[i], polyline[j]))
             }
@@ -749,13 +817,13 @@ object Poly2TriNew {
         fun meshClean(triangle: Triangle) {
             val triangles = mutableListOf(triangle)
 
-            while(triangles.isNotEmpty()){
+            while (triangles.isNotEmpty()){
                 val t = triangles.last()
                 triangles.removeAt(triangles.size - 1)
 
                 if (!t.interior) {
                     t.interior = true
-                    triangles.add(t)
+                    this.triangles.add(t)
                     for (i in 0 until 3) {
                         if (!t.constrainedEdge[i])
                             t.getNeighbor(i)?.let { triangles.add(it) }
@@ -831,8 +899,10 @@ object Poly2TriNew {
         fun sweepPoints(tcx: SweepContext) {
             for (i in 1 until tcx.getPointCount()) {
                 val point = tcx.getPoint(i)
+                debug { "SweepPoints.point[$i]: $point" }
                 val node = pointEvent(tcx, point)
                 for (j in point.edgeList) {
+                    debug { "SweepPoints.edge[$i]: $j" }
                     edgeEvent(tcx, j, node)
                 }
             }
@@ -861,11 +931,13 @@ object Poly2TriNew {
                 fill(tcx, node)
             }
 
+            //tcx.addNode(newNode)
+
             fillAdvancingFront(tcx, newNode)
             return newNode
         }
 
-        fun edgeEvent(tcx: SweepContext, edge: Edge, node: Node) {
+        private fun edgeEvent(tcx: SweepContext, edge: Edge, node: Node) {
             tcx.edgeEvent.constrainedEdge = edge
             tcx.edgeEvent.isRight = edge.p.x > edge.q.x
 
@@ -880,17 +952,24 @@ object Poly2TriNew {
             edgeEvent(tcx, edge.p, edge.q, node.triangle, edge.q)
         }
 
-        fun edgeEvent(tcx: SweepContext, ep: Point, eq: Point, triangle: Triangle?, point: Point) {
+        private fun edgeEvent(tcx: SweepContext, ep: Point, eq: Point, triangle: Triangle?, point: Point) {
+            debug { "tcx, ep=$ep, eq=$eq, point=$point, triangle=$triangle" }
             var triangle = triangle
             if (triangle == null) {
                 throw RuntimeException("EdgeEvent - null triangle")
             }
+
+            debug { " --> [0]" }
+
             if (isEdgeSideOfTriangle(triangle, ep, eq)) {
                 return
             }
 
             val p1: Point = triangle.pointCCW(point)
             val o1: Orientation = orient2d(eq, p1, ep)
+
+            debug { " --> [1] : $eq, $p1, $ep : $o1" }
+
             if (o1 == Orientation.COLLINEAR) {
                 if (triangle.contains(eq, p1)) {
                     triangle.markConstrainedEdge(eq, p1)
@@ -904,6 +983,8 @@ object Poly2TriNew {
                 }
                 return
             }
+
+            debug { " --> [2]" }
 
             val p2: Point = triangle.pointCW(point)
             val o2: Orientation = orient2d(eq, p2, ep)
@@ -921,10 +1002,19 @@ object Poly2TriNew {
                 return
             }
 
+            debug { " --> [3]" }
+
             if (o1 == o2) {
                 // Need to decide if we are rotating CW or CCW to get to a triangle
                 // that will cross edge
+                val otriangle = triangle
+
+                debug { "triangle: ${otriangle.getNeighbor(0)}, ${otriangle.getNeighbor(1)}, ${otriangle.getNeighbor(2)}" }
+
                 triangle = if (o1 == Orientation.CW) triangle.neighborCCW(point) else triangle.neighborCW(point)
+                check(triangle != null) {
+                    "Triangle is null $otriangle"
+                }
                 edgeEvent(tcx, ep, eq, triangle, point)
             } else {
                 // This triangle crosses constraint so lets flippin start!
@@ -934,7 +1024,7 @@ object Poly2TriNew {
         }
 
         private fun newFrontTriangle(tcx: SweepContext, point: Point, node: Node): Node {
-            val triangle = Triangle(point, node.point!!, node.next!!.point!!)
+            val triangle = Triangle(point, node.point, node.next!!.point)
 
             triangle.markNeighbor(node.triangle!!)
             tcx.addToMap(triangle)
@@ -975,13 +1065,20 @@ object Poly2TriNew {
         }
 
         private fun legalize(tcx: SweepContext, t: Triangle): Boolean {
+            debug { "Legalize: $t" }
             // To legalize a triangle we start by finding if any of the three edges
             // violate the Delaunay condition
             for (i in 0 until 3) {
+                debug { "Legalize[a]: $i; ${t.delaunayEdge[i]}" }
+
                 if (t.delaunayEdge[i]) continue
 
-                val ot = t.getNeighbor(i) ?: continue
+                val ot = t.getNeighbor(i)
 
+                debug { "Legalize[b]: $i; $ot" }
+
+
+                if (ot == null) continue
                 val p = t.getPoint(i)
                 val op = ot.oppositePoint(t, p)
                 val oi = ot.index(op)
