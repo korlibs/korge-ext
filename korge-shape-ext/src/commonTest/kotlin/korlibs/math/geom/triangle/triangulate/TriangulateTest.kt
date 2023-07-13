@@ -1,6 +1,7 @@
 package korlibs.math.geom.triangle.triangulate
 
-import korlibs.math.geom.MPoint
+import korlibs.math.geom.*
+import korlibs.math.triangle.poly2tri.*
 import korlibs.math.triangle.triangulate.triangulate
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,6 +17,22 @@ class TriangulateTest {
     //        }.triangulate().toString()
     //    )
     //}
+
+    @Test
+    fun testEdgeTriangulation() {
+        fun getTriangles(addInnerConstrainedEdge: Boolean): List<Poly2Tri.Triangle> {
+            val sc = Poly2Tri.SweepContextExt()
+            sc.addEdge(Point(0, 0), Point(100, 0))
+            sc.addEdge(Point(100, 0), Point(100, 100))
+            sc.addEdge(Point(100, 100), Point(0, 100))
+            sc.addEdge(Point(0, 100), Point(0, 0))
+            if (addInnerConstrainedEdge) sc.addEdge(Point(40, 40), Point(40, 60))
+            sc.triangulate()
+            return sc.getTriangles()
+        }
+        assertEquals(2, getTriangles(addInnerConstrainedEdge = false).size)
+        assertEquals(6, getTriangles(addInnerConstrainedEdge = true).size)
+    }
 
     @Test
     fun test2() {

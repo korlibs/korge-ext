@@ -1550,6 +1550,31 @@ object Poly2Tri {
         var right = false
     }
 
+    open class SweepContextExt() : SweepContext() {
+        val pointsToIndex = linkedHashMapOf<Point, Int>()
+
+        fun addPointToListAndGetIndex(p: Point): Int {
+            return pointsToIndex.getOrPut(p) {
+                points_.add(p.toMPoint())
+                points_.size - 1
+            }
+        }
+
+        fun addEdge(a: Point, b: Point) {
+            if (a == b) return
+            val i1 = addPointToListAndGetIndex(a)
+            val i2 = addPointToListAndGetIndex(b)
+            val p1 = points_[i1]
+            val p2 = points_[i2]
+            val edge = Edge(p1, p2)
+            this.edge_list.add(edge)
+            val index = if (edge.q === p1) i1 else i2
+            while (_p2t_edge_lists.size <= index) _p2t_edge_lists.add(FastArrayList())
+            _p2t_edge_lists[index]!!.add(edge)
+            //println("EDGE[$index]: $p1, $p2  :  $i1, $i2  :  $points_")
+        }
+    }
+
     /**
      * SweepContext constructor option
      * @typedef {Object} SweepContextOptions
@@ -1581,7 +1606,7 @@ object Poly2Tri {
      *          or any "Point like" custom class with <code>{x, y}</code> attributes.
      * @param {SweepContextOptions=} options - constructor options
      */
-    class SweepContext() {
+    open class SweepContext() {
         /**
          * Initial triangle factor, seed triangle will extend 30% of
          * PointSet width to both left and right.
@@ -1661,30 +1686,32 @@ object Poly2Tri {
          * @public
          * @param {Array.<Point>} polyline - array of "Point like" objects with {x,y}
          */
-        fun addHole(polyline: List<MPoint>) {
+        fun addHole(polyline: List<MPoint>, closed: Boolean = true) {
             var len = polyline.size
             val points = this.points_
             val start = points.size
             // Point addition
             points.addAll(polyline)
 
-            while (_p2t_edge_lists.size < points.size) _p2t_edge_lists.add(null)
+            val rlen = if (closed) len else len - 1
 
             // Edge initialization
-            for (i in 0 until len) {
+            for (i in 0 until rlen) {
                 val i1 = start + i
                 val i2 = start + ((i + 1) % len)
                 val p1 = points[i1]
                 val p2 = points[i2]
-                if (p1 != p2) {
-                    val edge = Edge(p1, p2)
-                    this.edge_list.add(edge)
-                    val index = if (edge.q == p1) i1 else i2
+                if (p1 == p2) continue
 
-                    if (_p2t_edge_lists[index] == null) _p2t_edge_lists[index] = FastArrayList()
-                    _p2t_edge_lists[index]!!.add(edge)
+                val edge = Edge(p1, p2)
+                this.edge_list.add(edge)
+                val index = if (edge.q === p1) i1 else i2
 
-                }
+                while (_p2t_edge_lists.size <= points.size) _p2t_edge_lists.add(FastArrayList())
+                //while (_p2t_edge_lists.size <= index) _p2t_edge_lists.add(FastArrayList())
+                //println("index=$index : ${_p2t_edge_lists.size}")
+                _p2t_edge_lists[index]!!.add(edge)
+                //println("EDGE[$index]: $p1, $p2  : $i1, $i2  :  $points_")
             }
         }
 
