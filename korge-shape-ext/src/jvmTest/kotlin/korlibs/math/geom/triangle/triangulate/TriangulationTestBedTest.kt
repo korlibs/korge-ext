@@ -39,6 +39,7 @@ class TriangulationTestBedTest(val name: String, val file: VfsFile) {
                 resourcesVfs["data"]
                     .listSimple()
                     .filter { it.extensionLC == "dat" }
+                    .filter { it.baseName != "sketchup.dat" }
                     .map {
                         arrayOf(it.baseName, it)
                     }

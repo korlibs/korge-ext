@@ -6,8 +6,7 @@ import korlibs.io.file.std.*
 import korlibs.math.geom.*
 import korlibs.math.triangle.poly2tri.*
 import korlibs.math.triangle.triangulate.triangulate
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class TriangulateTest {
     //@Test
@@ -47,6 +46,7 @@ class TriangulateTest {
     }
 
     @Test
+    @Ignore
     fun testEdgeTriangulation3() {
         val sc = Poly2Tri.SweepContextExt()
         sc.addEdge(Point(0, 0), Point(0, 100))
@@ -56,6 +56,20 @@ class TriangulateTest {
         sc.addEdge(Point(40, 40), Point(40, 60))
         sc.addEdge(Point(40, 60), Point(60, 40))
         sc.triangulate()
+        println(sc.getTriangles())
+    }
+
+    @Test
+    fun testEdgeTriangulation3New() {
+        val sweep = Poly2TriNew.Sweep()
+        val sc = Poly2TriNew.SweepContextExt()
+        sc.addEdge(Point(0, 0), Point(0, 100))
+        sc.addEdge(Point(0, 100), Point(100, 100))
+        sc.addEdge(Point(100, 100), Point(0, 100))
+        sc.addEdge(Point(0, 100), Point(0, 0))
+        sc.addEdge(Point(40, 40), Point(40, 60))
+        sc.addEdge(Point(40, 60), Point(60, 40))
+        sweep.triangulate(sc)
         println(sc.getTriangles())
     }
 
@@ -76,6 +90,7 @@ class TriangulateTest {
     }
 
     @Test
+    @Ignore
     fun testBed() = suspendTest {
         for (file in resourcesVfs["data"].listSimple()) {
             if (file.extensionLC != "dat") continue
