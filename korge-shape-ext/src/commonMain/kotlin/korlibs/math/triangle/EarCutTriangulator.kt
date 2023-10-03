@@ -9,26 +9,26 @@ import mapbox.earcut.*
 
 object EarCutTriangulator {
     fun triangulate(points: PointArrayList, holeIndices: IntArray?): TriangleList {
-        val floats = FloatArray(points.size * 2)
+        val doubles = DoubleArray(points.size * 2)
         for (n in 0 until points.size) {
             val p = points[n]
-            floats[n * 2 + 0] = p.x
-            floats[n * 2 + 1] = p.y
+            doubles[n * 2 + 0] = p.x
+            doubles[n * 2 + 1] = p.y
         }
-        val result = EarCut.earcut(floats, holeIndices, 2)
+        val result = EarCut.earcut(doubles, holeIndices, 2)
         return TriangleList(points, result.toShortArray())
     }
 }
 
-fun VectorPath.triangulateEarCut() = this.toPathPointList().triangulateEarCut()
+fun VectorPath.triangulateEarCut(up: Vector2D = Vector2D.UP): TriangleList = this.toPathPointList().triangulateEarCut(up)
 
-fun List<PointList>.triangulateEarCut(): TriangleList {
+fun List<PointList>.triangulateEarCut(up: Vector2D = Vector2D.UP): TriangleList {
     val allPoints = PointArrayList(this.sumOf { it.size })
     val holeIndices = IntArrayList()
     //var lastClockWise = true
     for (path in this) {
         //val clockWise = path.orientation() != Orientation.COUNTER_CLOCK_WISE
-        if (path.orientation() == Orientation.COUNTER_CLOCK_WISE) {
+        if (path.orientationWithUp(up) == Orientation.COUNTER_CLOCK_WISE) {
             //if (lastClockWise != clockWise) {
             //lastClockWise = clockWise
             holeIndices.add(allPoints.size)

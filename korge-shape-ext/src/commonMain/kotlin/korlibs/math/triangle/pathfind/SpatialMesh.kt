@@ -6,6 +6,7 @@ import korlibs.math.geom.triangle.Edge
 import korlibs.math.geom.triangle.Triangle
 import korlibs.math.geom.triangle.containsPoint
 import korlibs.math.geom.triangle.pointInsideTriangle
+import korlibs.number.*
 import kotlin.collections.ArrayList
 import kotlin.collections.Iterable
 import kotlin.collections.LinkedHashMap
@@ -50,7 +51,7 @@ class SpatialMesh {
         throw Error("Point2d not inside triangles")
     }
 
-    fun spatialNodeFromPoint(point: Point): Node = spatialNodeFromPoint(point.xD, point.yD)
+    fun spatialNodeFromPoint(point: Point): Node = spatialNodeFromPoint(point.x, point.y)
 
     fun getNodeAt(point: Point): Node? {
         for (node in nodes) if (node.triangle!!.containsPoint(point)) return node

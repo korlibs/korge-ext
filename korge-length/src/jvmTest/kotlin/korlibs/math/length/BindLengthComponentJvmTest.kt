@@ -17,12 +17,12 @@ class BindLengthComponentJvmTest {
         val rect = container.solidRect(100, 100)
         rect.bindLength(View::x) { 50.percent }
         rect.bindLength(View::y) { 50.percent }
-        assertEquals(0f, rect.x)
-        assertEquals(0f, rect.y)
+        assertEquals(0.0, rect.x)
+        assertEquals(0.0, rect.y)
         assertScreenshot()
         delayFrame()
         assertScreenshot()
-        assertEquals(150f, rect.x)
-        assertEquals(250f, rect.y)
+        assertEquals(150.0, rect.x)
+        assertEquals(250.0, rect.y)
     }
 }

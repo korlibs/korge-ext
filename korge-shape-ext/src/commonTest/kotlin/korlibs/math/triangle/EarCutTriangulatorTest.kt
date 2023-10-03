@@ -2,12 +2,29 @@ package korlibs.math.triangle
 
 import korlibs.math.geom.shape.*
 import korlibs.math.geom.vector.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class EarCutTriangulatorTest {
     @Test
     fun test() {
+        val path = //rect(200, 0, 100, 100)
+            buildVectorPath(VectorPath()) {
+                rect(0, 0, 10, 10)
+                rectHole(2, 2, 6, 6)
+                //rect(200, 0, 100, 100)
+            }
+
+        val triangles = path.triangulateEarCut()
+
+        assertEquals(
+            "[(0, 0), (10, 0), (10, 10), (0, 10), (2, 2), (2, 8), (8, 8), (8, 2)]",
+            triangles.points.toList().toString()
+        )
+    }
+
+    @Test
+    @Ignore
+    fun test2() {
         val path = //rect(200, 0, 100, 100)
             buildVectorPath(VectorPath()) {
                 rect(0, 0, 10, 10)

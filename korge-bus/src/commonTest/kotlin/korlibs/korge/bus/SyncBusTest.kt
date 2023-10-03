@@ -15,7 +15,7 @@ class SyncBusTest {
 
     @Test
     fun test() = suspendTest {
-        val injector = AsyncInjector()
+        val injector = Injector()
         injector.mapSyncBus()
         injector.mapPrototype { Scene1(get()) }
         val injector2 = injector.child()

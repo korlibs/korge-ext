@@ -15,7 +15,7 @@ class BusTest {
 
     @Test
     fun test() = suspendTest {
-        val injector = AsyncInjector()
+        val injector = Injector()
         injector.mapInstance(coroutineContext) // This should be mapped already in the Korge { } block
         injector.mapBus()
         injector.mapPrototype { Scene1(get()) }

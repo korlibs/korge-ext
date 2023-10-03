@@ -167,7 +167,7 @@ class SpatialMeshFind(val spatialMesh: SpatialMesh) {
             override fun toString(): String = "Funnel($path)"
 
             companion object {
-                private fun triarea2(a: Point, b: Point, c: Point): Float {
+                private fun triarea2(a: Point, b: Point, c: Point): Double {
                     val ax = b.x - a.x
                     val ay = b.y - a.y
                     val bx = c.x - a.x
@@ -175,7 +175,7 @@ class SpatialMeshFind(val spatialMesh: SpatialMesh) {
                     return bx * ay - ax * by
                 }
 
-                private fun vdistsqr(a: Point, b: Point): Float = hypot(b.x - a.x, b.y - a.y)
+                private fun vdistsqr(a: Point, b: Point): Double = hypot(b.x - a.x, b.y - a.y)
                 private fun vdistsqr(ax: Double, ay: Double, bx: Double, by: Double): Double = hypot(bx - ax, by - ay)
 
                 private fun vequal(a: Point, b: Point): Boolean = vdistsqr(a, b) < (0.001 * 0.001)

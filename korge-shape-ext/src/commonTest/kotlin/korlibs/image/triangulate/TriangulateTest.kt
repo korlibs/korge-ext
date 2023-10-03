@@ -66,4 +66,4 @@ fun VectorBuilder.triangle(x1: Double, y1: Double, x2: Double, y2: Double, x3: D
 }
 
 fun VectorBuilder.triangle(p1: MPoint, p2: MPoint, p3: MPoint) = triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
-fun VectorBuilder.triangle(p1: Point, p2: Point, p3: Point) = triangle(p1.xD, p1.yD, p2.xD, p2.yD, p3.xD, p3.yD)
+fun VectorBuilder.triangle(p1: Point, p2: Point, p3: Point) = triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)

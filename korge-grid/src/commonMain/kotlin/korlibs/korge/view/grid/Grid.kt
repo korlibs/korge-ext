@@ -1,9 +1,8 @@
 package korlibs.korge.view.grid
 
-import korlibs.memory.nearestAlignedTo
-import korlibs.korge.render.RenderContext
-import korlibs.korge.render.useLineBatcher
 import korlibs.image.color.*
+import korlibs.korge.render.*
+import korlibs.math.*
 import korlibs.math.geom.*
 
 interface Grid {

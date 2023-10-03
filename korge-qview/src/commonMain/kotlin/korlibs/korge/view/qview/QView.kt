@@ -12,6 +12,7 @@ import korlibs.io.async.*
 import korlibs.korge.view.*
 import korlibs.math.geom.*
 import korlibs.math.interpolation.*
+import kotlinx.coroutines.*
 import kotlin.reflect.KMutableProperty1
 
 class QView(val views: List<View>) : List<View> by views, BView {
@@ -38,28 +39,28 @@ class QView(val views: List<View>) : List<View> by views, BView {
         get() = firstOrNull?.visible ?: false
         set(value) = fastForEach { it.visible = value }
 
-    var alpha: Float
-        get() = firstOrNull?.alpha ?: 1f
+    var alpha: Double
+        get() = firstOrNull?.alpha ?: 1.0
         set(value) = fastForEach { it.alpha = value }
 
-    var scaleAvg: Float
-        get() = firstOrNull?.scaleAvg ?: 1f
-        set(value) = fastForEach { it.scaleAvg = value }
+    var scale: Double
+        get() = firstOrNull?.scale ?: 1.0
+        set(value) = fastForEach { it.scale = value }
 
-    var scaleX: Float
-        get() = firstOrNull?.scaleX ?: 1f
+    var scaleX: Double
+        get() = firstOrNull?.scaleX ?: 1.0
         set(value) = fastForEach { it.scaleX = value }
 
-    var scaleY: Float
-        get() = firstOrNull?.scaleY ?: 1f
+    var scaleY: Double
+        get() = firstOrNull?.scaleY ?: 1.0
         set(value) = fastForEach { it.scaleY = value }
 
-    var x: Float
-        get() = firstOrNull?.x ?: 0f
+    var x: Double
+        get() = firstOrNull?.x ?: 0.0
         set(value) = fastForEach { it.x = value }
 
-    var y: Float
-        get() = firstOrNull?.y ?: 0f
+    var y: Double
+        get() = firstOrNull?.y ?: 0.0
         set(value) = fastForEach { it.y = value }
 
     var rotation: Angle
@@ -80,7 +81,7 @@ class QView(val views: List<View>) : List<View> by views, BView {
 }
 
 fun QView.visible(value: Boolean) { visible = value }
-fun QView.alpha(value: Float) { alpha = value }
+inline fun QView.alpha(value: Number) { alpha = value.toDouble() }
 fun QView.onClick(handler: @EventsDslMarker suspend (MouseEvents) -> Unit) = fastForEach { it.onClick(handler) }
 inline fun <reified T : View> QView.castTo(): T? = firstOrNull as? T?
 

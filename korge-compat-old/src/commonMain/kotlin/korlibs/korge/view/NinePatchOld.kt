@@ -56,8 +56,8 @@ class NinePatchOld(
         val texRighttWidth = tex.width * right
         val texBottomHeight = tex.height * bottom
 
-        val ratioX = if (width < tex.width) width / tex.width else 1f
-        val ratioY = if (height < tex.height) height / tex.height else 1f
+        val ratioX = if (width < tex.width) width / tex.width else 1.0
+        val ratioY = if (height < tex.height) height / tex.height else 1.0
 
         val actualRatioX = min(ratioX, ratioY)
         val actualRatioY = min(ratioX, ratioY)

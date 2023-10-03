@@ -5,7 +5,7 @@ import korlibs.math.geom.*
 import korlibs.math.geom.shape.ops.*
 import korlibs.math.geom.shape.ops.internal.*
 import korlibs.math.geom.vector.*
-import korlibs.math.internal.*
+import korlibs.number.*
 import kotlin.test.*
 
 class Shape2DTest {

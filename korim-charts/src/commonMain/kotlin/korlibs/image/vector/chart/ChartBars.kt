@@ -38,7 +38,7 @@ open class ChartBars(val list: List<DataPoint>) : Chart() {
         color: RGBA,
         width: Double = 1.2
     ) {
-        lineWidth = width.toFloat()
+        lineWidth = width.toDouble()
         beginPath()
         moveTo(Point(x0, y0))
         lineTo(Point(x1, y1))
@@ -46,8 +46,8 @@ open class ChartBars(val list: List<DataPoint>) : Chart() {
     }
 
     private fun Context2d.renderRefLine(rect: Rectangle, y: Double, value: String, important: Boolean) {
-        val x: Float = rect.left
-        renderLine(x.toDouble(), y, rect.right.toDouble(), y, if (important) Colors.BLACK else Colors.DARKGREY)
+        val x: Double = rect.left
+        renderLine(x, y, rect.right, y, if (important) Colors.BLACK else Colors.DARKGREY)
         fillText(
             value,
             Point(x - 2, y.toFloat()),

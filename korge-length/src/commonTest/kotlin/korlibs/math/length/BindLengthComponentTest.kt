@@ -17,29 +17,29 @@ class BindLengthComponentTest : ViewsForTesting(log = true) {
             x = 50.percent
             y = 50.percent
         }
-        assertEquals(0f, rect.x)
-        assertEquals(0f, rect.y)
+        assertEquals(0.0, rect.x)
+        assertEquals(0.0, rect.y)
         delayFrame()
-        assertEquals(150f, rect.x)
-        assertEquals(250f, rect.y)
-        rect.x = 0f
-        rect.y = 0f
-        assertEquals(0f, rect.x)
-        assertEquals(0f, rect.y)
+        assertEquals(150.0, rect.x)
+        assertEquals(250.0, rect.y)
+        rect.x = 0.0
+        rect.y = 0.0
+        assertEquals(0.0, rect.x)
+        assertEquals(0.0, rect.y)
         delayFrame() // The length component will override the previously set values
-        assertEquals(150f, rect.x)
-        assertEquals(250f, rect.y)
+        assertEquals(150.0, rect.x)
+        assertEquals(250.0, rect.y)
         rect.lengths {
             x = null
             y = null
         }
         delayFrame()
-        assertEquals(150f, rect.x)
-        assertEquals(250f, rect.y)
-        rect.x = 0f
-        rect.y = 0f
+        assertEquals(150.0, rect.x)
+        assertEquals(250.0, rect.y)
+        rect.x = 0.0
+        rect.y = 0.0
         delayFrame() // The length updater component shouldn't exist anymore, so the property changes are kept
-        assertEquals(0f, rect.x)
-        assertEquals(0f, rect.y)
+        assertEquals(0.0, rect.x)
+        assertEquals(0.0, rect.y)
     }
 }

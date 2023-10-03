@@ -35,7 +35,7 @@ class TextOldTest {
 
     @Test
     fun testDebugFontSize() {
-        assertEquals(8f, debugBmpFontSync.fontSize)
+        assertEquals(8.0, debugBmpFontSync.fontSize)
         assertEquals(Size(192, 192), debugBmpFontSync.baseBmp.size.toFloat())
     }
 

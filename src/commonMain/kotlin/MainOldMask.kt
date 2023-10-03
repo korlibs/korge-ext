@@ -18,13 +18,13 @@ class MainOldMask : ScaledScene(512, 512) {
         addChild(maskedView)
         maskedView.text("HELLO WORLD!", textSize = 64f)
         val img = maskedView.image(bitmap2).scale(3, 3)
-        val mask = Circle(256f).centered
+        val mask = Circle(256.0).centered
         maskedView.mask = mask
         maskedView.mask!!.position(0, 0)
         mouse {
             onMoveAnywhere {
                 val mouse = localMousePos(views)
-                maskedView.mask!!.position(mouse.xD.coerceIn(0.0, 512.0), mouse.yD.coerceIn(0.0, 512.0))
+                maskedView.mask!!.position(mouse.x.coerceIn(0.0, 512.0), mouse.y.coerceIn(0.0, 512.0))
             }
         }
     }
