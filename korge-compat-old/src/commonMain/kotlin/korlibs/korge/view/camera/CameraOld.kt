@@ -70,13 +70,13 @@ class CameraContainerOld(
         val contentContainerX = width * anchorX
         val contentContainerY = height * anchorY
 
-        content.x = -x.toFloat()
-        content.y = -y.toFloat()
-        contentContainer.x = contentContainerX.toFloat()
-        contentContainer.y = contentContainerY.toFloat()
+        content.x = -x
+        content.y = -y
+        contentContainer.x = contentContainerX
+        contentContainer.y = contentContainerY
         contentContainer.rotation = angle
-        contentContainer.scaleX = realScaleX.toFloat()
-        contentContainer.scaleY = realScaleY.toFloat()
+        contentContainer.scaleX = realScaleX
+        contentContainer.scaleY = realScaleY
     }
 
     internal fun setTo(camera: CameraOld) = setTo(
@@ -86,8 +86,8 @@ class CameraContainerOld(
         camera.height,
         camera.zoom,
         camera.angle,
-        camera.anchor.doubleX,
-        camera.anchor.doubleY
+        camera.anchor.sx,
+        camera.anchor.sy
     )
 }
 
@@ -105,7 +105,7 @@ class CameraOld(
     override var anchor: Anchor = Anchor(anchorX, anchorY)
 
     var anchorX: Double
-        get() = anchor.doubleX
+        get() = anchor.sx
         set(value) { anchor = anchor}
 
     init {
@@ -157,8 +157,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchor.doubleX,
-        anchorY: Double = this.anchor.doubleY
+        anchorX: Double = this.anchor.sx,
+        anchorY: Double = this.anchor.sy,
     ): CameraOld {
         if (withUpdate) {
             container?.setTo(x, y, width, height, zoom, angle, anchorX, anchorY)
@@ -182,8 +182,8 @@ class CameraOld(
         height = other.height,
         zoom = other.zoom,
         angle = other.angle,
-        anchorX = other.anchor.doubleX,
-        anchorY = other.anchor.doubleY,
+        anchorX = other.anchor.sx,
+        anchorY = other.anchor.sy,
         time = time,
         easing = easing
     )
@@ -195,8 +195,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchor.doubleX,
-        anchorY: Double = this.anchor.doubleY,
+        anchorX: Double = this.anchor.sx,
+        anchorY: Double = this.anchor.sy,
         time: TimeSpan,
         easing: Easing = Easing.LINEAR
     ) {
@@ -206,8 +206,8 @@ class CameraOld(
         val initialHeight = this.height
         val initialZoom = this.zoom
         val initialAngle = this.angle
-        val initialAnchorX = this.anchor.doubleX
-        val initialAnchorY = this.anchor.doubleY
+        val initialAnchorX = this.anchor.sx
+        val initialAnchorY = this.anchor.sy
         container?.tween(time = time, easing = easing) { ratio ->
             setTo(
                 ratio.toRatio().interpolate(initialX, x),
@@ -249,8 +249,8 @@ class CameraOld(
         height: Double = this.height,
         zoom: Double = this.zoom,
         angle: Angle = this.angle,
-        anchorX: Double = this.anchor.doubleX,
-        anchorY: Double = this.anchor.doubleY
+        anchorX: Double = this.anchor.sx,
+        anchorY: Double = this.anchor.sy
     ) = CameraOld(
         x = x,
         y = y,
@@ -269,8 +269,8 @@ class CameraOld(
         height = ratio.interpolate(l.height, r.height),
         zoom = ratio.interpolate(l.zoom, r.zoom),
         angle = ratio.interpolateAngleDenormalized(l.angle, r.angle),
-        anchorX = ratio.interpolate(l.anchor.doubleX, r.anchor.doubleX),
-        anchorY = ratio.interpolate(l.anchor.doubleY, r.anchor.doubleY)
+        anchorX = ratio.interpolate(l.anchor.sx, r.anchor.sx),
+        anchorY = ratio.interpolate(l.anchor.sy, r.anchor.sy)
     )
 
     override fun interpolateWith(ratio: Ratio, other: CameraOld) = CameraOld().setToInterpolated(ratio, this, other)

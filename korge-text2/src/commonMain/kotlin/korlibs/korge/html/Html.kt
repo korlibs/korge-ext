@@ -1,6 +1,6 @@
 package korlibs.korge.html
 
-import korlibs.crypto.encoding.*
+import korlibs.encoding.*
 import korlibs.datastructure.*
 import korlibs.datastructure.iterators.*
 import korlibs.image.bitmap.*
@@ -22,16 +22,16 @@ private val DEBUG_FONT_BYTES: ByteArray get() = "iVBORw0KGgoAAAANSUhEUgAAAMAAAAD
 private var debugBmpFontOrNull: BitmapFont? = null
 
 private fun debugBmpFont(tex: BmpSlice): BitmapFont {
-    val fntAdvance = 7f
-    val fntWidth = 8f
-    val fntHeight = 8f
+    val fntAdvance = 7.0
+    val fntWidth = 8.0
+    val fntHeight = 8.0
 
-    val fntBlockX = 2f
-    val fntBlockY = 2f
-    val fntBlockWidth = 12f
-    val fntBlockHeight = 12f
+    val fntBlockX = 2.0
+    val fntBlockY = 2.0
+    val fntBlockWidth = 12.0
+    val fntBlockHeight = 12.0
 
-    return BitmapFont(fntHeight, fntHeight, fntHeight - 1f, (0 until 256).associateWith {
+    return BitmapFont(fntHeight, fntHeight, fntHeight - 1.0, (0 until 256).associateWith {
         val x = it % 16
         val y = it / 16
         BitmapFont.Glyph(

@@ -258,7 +258,7 @@ open class KTreeSerializer(val views: Views) : KTreeSerializerHolder, Extra by E
         }
 
         fun angleDegrees(prop: KMutableProperty0<Angle>, defaultValue: Angle) {
-            prop.set(xml.double(prop.name, defaultValue.degreesD).degrees)
+            prop.set(xml.double(prop.name, defaultValue.degrees).degrees)
         }
 
         fun color(prop: KMutableProperty0<RGBA>, defaultValue: RGBA) {
@@ -277,14 +277,14 @@ open class KTreeSerializer(val views: Views) : KTreeSerializerHolder, Extra by E
 
         stringNull(view::name)
         color(view::colorMul, Colors.WHITE)
-        float(view::alpha, 1f)
-        float(view::speed, 1f)
-        float(view::ratio, 0f)
-        float(view::x, 0f)
-        float(view::y, 0f)
+        double(view::alpha, 1.0)
+        double(view::speed, 1.0)
+        double(view::ratio, 0.0)
+        double(view::x, 0.0)
+        double(view::y, 0.0)
         angleDegrees(view::rotation, 0.degrees)
-        float(view::scaleX, 1f)
-        float(view::scaleY, 1f)
+        double(view::scaleX, 1.0)
+        double(view::scaleY, 1.0)
         angleDegrees(view::skewX, 0.degrees)
         angleDegrees(view::skewY, 0.degrees)
         if (view is Anchorable) {
@@ -298,7 +298,7 @@ open class KTreeSerializer(val views: Views) : KTreeSerializerHolder, Extra by E
         }
         if (view is Text) {
             string(view::text, "Text")
-            float(view::textSize, Text.DEFAULT_TEXT_SIZE)
+            double(view::textSize, Text.DEFAULT_TEXT_SIZE)
             boolean(view::autoScaling, Text.DEFAULT_AUTO_SCALING)
             //view.fontSource = xml.str("fontSource", "")
             view.verticalAlign = VerticalAlign(xml.str("verticalAlign"))
@@ -346,14 +346,14 @@ open class KTreeSerializer(val views: Views) : KTreeSerializerHolder, Extra by E
             properties["colorMul"] = view.colorMul.hexString
         }
         if (view.blendMode != BlendMode.INHERIT) add(view::blendMode)
-        if (view.alpha != 1f) add(view::alpha)
-        if (view.speed != 1f) add(view::speed)
-        if (view.ratio != 0f) add(view::ratio)
-        if (view.x != 0f) add(view::x)
-        if (view.y != 0f) add(view::y)
+        if (view.alpha != 1.0) add(view::alpha)
+        if (view.speed != 1.0) add(view::speed)
+        if (view.ratio != 0.0) add(view::ratio)
+        if (view.x != 0.0) add(view::x)
+        if (view.y != 0.0) add(view::y)
         if (view.rotation != 0.radians) add(view::rotation)
-        if (view.scaleX != 1f) add(view::scaleX)
-        if (view.scaleY != 1f) add(view::scaleY)
+        if (view.scaleX != 1.0) add(view::scaleX)
+        if (view.scaleY != 1.0) add(view::scaleY)
         if (view.skewX != 0.degrees) add(view::skewX)
         if (view.skewY != 0.degrees) add(view::skewY)
         if (view is RectBase) {
@@ -521,7 +521,7 @@ class TreeViewRef() : Container(), ViewLeaf, ViewFileRef by ViewFileRef.Mixin() 
         baseForceLoadSourceFile(views, currentVfs, sourceFile)
         removeChildren()
         addChildren((currentVfs["$sourceFile"].readKTree(views) as Container).children.toList())
-        scaleAvg = 1f
+        scaleAvg = 1.0
     }
 
     override fun renderInternal(ctx: RenderContext) {

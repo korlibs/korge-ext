@@ -1,8 +1,7 @@
 package korlibs.korge.bus
 
 import korlibs.datastructure.iterators.fastForEach
-import korlibs.inject.AsyncDestructor
-import korlibs.inject.AsyncInjector
+import korlibs.inject.*
 import korlibs.io.async.launchUnscoped
 import korlibs.io.lang.Closeable
 import kotlin.coroutines.CoroutineContext
@@ -11,7 +10,7 @@ import kotlin.reflect.KClass
 class Bus(
 	private val globalBus: GlobalBus,
     val coroutineContext: CoroutineContext = globalBus.coroutineContext,
-) : Closeable, AsyncDestructor {
+) : Closeable, InjectorDestructor {
 	private val closeables = arrayListOf<Closeable>()
 
 	suspend fun send(message: Any) {
@@ -38,7 +37,7 @@ class Bus(
 		}
 	}
 
-    override suspend fun deinit() {
+    override fun deinit() {
         close()
     }
 }
@@ -79,7 +78,7 @@ class GlobalBus(
     }
 }
 
-fun AsyncInjector.mapBus() {
+fun Injector.mapBus() {
     mapSingleton { GlobalBus(get()) }
     mapPrototype { Bus(get(), get()) }
 }

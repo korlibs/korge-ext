@@ -12,7 +12,7 @@ import kotlin.coroutines.*
 class JellyButton(val view: View?, val coroutineContext: CoroutineContext, var targetScale: Float = 1.5f) {
 	val hitTest = view["hitTest"].firstOrNull ?: view
 	val content = view["content"].firstOrNull ?: view
-	val initialScale: Float = content?.scaleAvg ?: 1f
+	val initialScale: Double = content?.scaleAvg ?: 1.0
 	var down = false
 	var over = false
 
@@ -20,7 +20,7 @@ class JellyButton(val view: View?, val coroutineContext: CoroutineContext, var t
 
 	init {
 		if (hitTest != content) {
-			hitTest?.alpha = 0f
+			hitTest?.alphaF = 0f
 		}
 		//println("----------------")
 		//println(hitTest?.globalBounds)

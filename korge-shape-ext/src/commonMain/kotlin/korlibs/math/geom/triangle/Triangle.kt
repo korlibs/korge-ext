@@ -145,7 +145,7 @@ fun Triangle.pointInsideTriangle(x: Double, y: Double): Boolean {
     return if (sign0 >= 0) (sign1 >= 0) && (sign2 >= 0) && (sign3 >= 0) else (sign1 <= 0) && (sign2 <= 0) && (sign3 <= 0)
 }
 
-fun Triangle.pointInsideTriangle(pp: Point): Boolean = pointInsideTriangle(pp.xD, pp.yD)
+fun Triangle.pointInsideTriangle(pp: Point): Boolean = pointInsideTriangle(pp.x, pp.y)
 fun Triangle.pointInsideTriangle(pp: MPoint): Boolean = pointInsideTriangle(pp.x, pp.y)
 
 // Optimized?

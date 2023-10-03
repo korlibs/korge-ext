@@ -4,6 +4,7 @@ import korlibs.datastructure.*
 import korlibs.io.lang.*
 import korlibs.korge.annotations.*
 import korlibs.korge.view.*
+import korlibs.math.*
 import korlibs.math.geom.*
 import korlibs.math.length.*
 import korlibs.memory.*
@@ -79,10 +80,10 @@ var ViewWithLength.scaleAvg: Length? by ViewWithLengthProp(View::scaleAvg)
 var ViewWithLength.scaleX: Length? by ViewWithLengthProp(View::scaleX)
 var ViewWithLength.scaleY: Length? by ViewWithLengthProp(View::scaleY)
 
-fun ViewWithLengthProp(prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null) = LengthDelegatedProperty<ViewWithLength>(prop, horizontal) { it.view }
-fun LengthDelegatedProperty(prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null) = LengthDelegatedProperty<View>(prop, horizontal) { it }
+fun ViewWithLengthProp(prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null) = LengthDelegatedProperty<ViewWithLength>(prop, horizontal) { it.view }
+fun LengthDelegatedProperty(prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null) = LengthDelegatedProperty<View>(prop, horizontal) { it }
 
-class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Float>, horizontal: Boolean? = null, val getView: (T) -> View) {
+class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Double>, horizontal: Boolean? = null, val getView: (T) -> View) {
     val horizontal = horizontal ?: prop.isHorizontal
     private fun getBind(view: View): BindLengthComponent = view.bindLengthComponent
 
@@ -95,7 +96,7 @@ class LengthDelegatedProperty<T>(val prop: KMutableProperty1<View, Float>, horiz
         if (length == null) {
             bind.removeBind(horizontal, prop.name)
         } else {
-            bind.setBind(horizontal, prop.name, { prop.set(view, it.toFloat()) }, length)
+            bind.setBind(horizontal, prop.name, { prop.set(view, it) }, length)
         }
     }
 }

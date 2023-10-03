@@ -626,16 +626,16 @@ object Poly2TriNew {
     }
 
     open class SweepContextExt(polylines: List<List<Point>> = emptyList()) : SweepContext(polylines) {
-        val pointsToIndex = linkedHashMapOf<Vector2, Int>()
+        val pointsToIndex = linkedHashMapOf<Vector2D, Int>()
 
-        fun addPointToListAndGetIndex(p: Vector2): Int {
+        fun addPointToListAndGetIndex(p: Vector2D): Int {
             return pointsToIndex.getOrPut(p) {
-                points.add(Point(p.xD, p.yD))
+                points.add(Point(p.x, p.y))
                 points.size - 1
             }
         }
 
-        fun addEdge(a: Vector2, b: Vector2) {
+        fun addEdge(a: Vector2D, b: Vector2D) {
             if (a == b) return
             val i1 = addPointToListAndGetIndex(a)
             val i2 = addPointToListAndGetIndex(b)

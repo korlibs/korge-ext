@@ -2,8 +2,8 @@ package korlibs.korge.view.grid
 
 import korlibs.image.color.*
 import korlibs.korge.render.*
+import korlibs.math.*
 import korlibs.math.geom.*
-import korlibs.memory.nearestAlignedTo
 
 interface Grid {
     fun snap(point: Point, out: Point = Point()): Point
@@ -23,8 +23,8 @@ open class OrthographicGrid(
 
     override fun snap(point: Point, out: Point): Point {
         return Point(
-            point.xD.nearestAlignedTo(width.toDouble()).toFloat(),
-            point.yD.nearestAlignedTo(height.toDouble()).toFloat()
+            point.x.nearestAlignedTo(width.toDouble()).toFloat(),
+            point.y.nearestAlignedTo(height.toDouble()).toFloat()
         )
     }
 

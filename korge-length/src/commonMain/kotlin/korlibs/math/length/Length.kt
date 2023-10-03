@@ -1,5 +1,6 @@
 package korlibs.math.length
 
+import korlibs.math.*
 import korlibs.memory.*
 import kotlin.math.*
 

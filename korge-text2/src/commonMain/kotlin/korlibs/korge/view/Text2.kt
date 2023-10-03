@@ -242,7 +242,7 @@ open class Text2(
         _renderInternal(null)
         if (cachedVersionGlyphMetrics != version) {
             cachedVersionGlyphMetrics = version
-            _textMetricsResult = font.getOrNull()?.getTextBoundsWithGlyphs(fontSize.toFloat(), text, renderer, alignment)
+            _textMetricsResult = font.getOrNull()?.getTextBoundsWithGlyphs(fontSize, text, renderer, alignment)
         }
         return _textMetricsResult ?: error("Must ensure font is resolved before calling getGlyphMetrics")
     }
@@ -279,12 +279,12 @@ open class Text2(
 
         if (autoSize && font is Font && boundsVersion != version) {
             boundsVersion = version
-            val metrics = font.getTextBounds(textSize.toFloat(), text, out = textMetrics, renderer = renderer, align = alignment)
+            val metrics = font.getTextBounds(textSize, text, out = textMetrics, renderer = renderer, align = alignment)
             _textBounds = Rectangle(
                 metrics.left,
                 alignment.vertical.getOffsetY(metrics.height, -metrics.ascent),
                 metrics.width,
-                font.getFontMetrics(textSize.toFloat(), metrics = fontMetrics).lineHeight * lineCount
+                font.getFontMetrics(textSize, metrics = fontMetrics).lineHeight * lineCount
             )
             //println("autoSize: _textBounds=$_textBounds, ${alignment.horizontal}, ${alignment.horizontal.getOffsetX(metrics.width)} + ${metrics.left}")
         }
@@ -304,7 +304,7 @@ open class Text2(
                     }
                     bitmapFontActions.mreset()
                     bitmapFontActions.align = TextAlignment.BASELINE_LEFT
-                    renderer.invoke(bitmapFontActions, text, textSize.toFloat(), font)
+                    renderer.invoke(bitmapFontActions, text, textSize, font)
                     while (container.numChildren < bitmapFontActions.size) {
                         container.image(Bitmaps.transparent)
                     }
@@ -328,8 +328,8 @@ open class Text2(
 
                     //val dx = (-_textBounds.width - textWidth) * horizontalAlign.ratio
                     val dx = _textBounds.x
-                    val dy: Float = when (verticalAlign) {
-                        VerticalAlign.BASELINE -> 0f
+                    val dy: Double = when (verticalAlign) {
+                        VerticalAlign.BASELINE -> 0.0
                         VerticalAlign.TOP -> firstLineInfos.maxTop
                         else -> firstLineInfos.maxTop - (totalHeight) * verticalAlign.ratioFake
                     }
@@ -392,7 +392,7 @@ open class Text2(
                         drawText(
                             text = this@Text2.text,
                             pos = Point.ZERO,
-                            size = realTextSize.toFloat(),
+                            size = realTextSize,
                             font = font,
                             paint = this@Text2.color,
                             renderer = this@Text2.renderer,
@@ -414,7 +414,7 @@ open class Text2(
                     //setContainerPosition(x * 1.0, y * 1.0, font.getFontMetrics(fontSize, fontMetrics).baseline)
                     //println("alignment=$alignment, horizontalAlign=$horizontalAlign, verticalAlign=$verticalAlign")
                     //setContainerPosition(x, y, font.getFontMetrics(fontSize, fontMetrics).baseline)
-                    setContainerPosition(0.0, 0.0, font.getFontMetrics(fontSize.toFloat(), fontMetrics).baseline.toDouble())
+                    setContainerPosition(0.0, 0.0, font.getFontMetrics(fontSize, fontMetrics).baseline)
 
                 }
                 //_staticImage?.smoothing = smoothing
@@ -432,7 +432,7 @@ open class Text2(
             //staticImage?.position(x + alignment.horizontal.getOffsetX(textBounds.width), y + alignment.vertical.getOffsetY(textBounds.height, font.getFontMetrics(fontSize).baseline))
 
             // @TODO: Fix this!
-            setRealContainerPosition(x + alignment.horizontal.getOffsetX(_textBounds.width.toFloat()), y - alignment.vertical.getOffsetY(_textBounds.height.toFloat(), baseline.toFloat()))
+            setRealContainerPosition(x + alignment.horizontal.getOffsetX(_textBounds.width), y - alignment.vertical.getOffsetY(_textBounds.height, baseline))
         }
     }
 

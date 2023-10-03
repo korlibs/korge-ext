@@ -8,7 +8,7 @@ import kotlin.math.*
 fun Font.getBounds(text: String, format: Html.Format, out: MRectangle = MRectangle()): MRectangle {
     //val font = getBitmapFont(format.computedFace, format.computedSize)
     val font = this
-    val textSize = format.computedSize.toFloat()
+    val textSize = format.computedSize.toDouble()
     var width = 0.0
     var height = 0.0
     var dy = 0.0
