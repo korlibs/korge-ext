@@ -17,3 +17,4 @@ dependencies:
 - ./korio-bus
 - ./korma-astar
 - ./korma-tile-raycasting/korma-tile-raycasting
+- ./korma-tile-raycasting/korma-tile-raycasting

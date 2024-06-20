@@ -22,3 +22,4 @@ gradle-app.setting
 /korge.keystore
 /local.properties
 /src/main
+/.kotlin
